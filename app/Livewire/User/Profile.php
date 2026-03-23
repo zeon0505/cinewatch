@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\Layout;
 
 class Profile extends Component
 {
@@ -42,8 +43,9 @@ class Profile extends Component
         session()->flash('message', 'Profil berhasil diperbarui.');
     }
 
+    #[Layout('components.layouts.dashboard')]
     public function render()
     {
-        return view('livewire.user.profile')->layout('components.layouts.app');
+        return view('livewire.user.profile');
     }
 }

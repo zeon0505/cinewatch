@@ -47,11 +47,15 @@
 
                     <!-- Video URL -->
                     <div class="space-y-2 md:col-span-2">
-                        <label class="text-[10px] text-gray-400 font-black uppercase tracking-widest block">URL Video (Embed/Streaming)</label>
+                        <label class="text-[10px] text-gray-400 font-black uppercase tracking-widest block">URL Video (Direct Link / .mp4 / .m3u8)</label>
                         <div class="flex relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 material-symbols-outlined text-[18px]">link</span>
-                            <input wire:model="video_url" type="url" class="w-full bg-black/50 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white focus:border-[#E50914] outline-none transition-all placeholder:text-gray-700 font-medium" placeholder="https://vidsrc.to/embed/movie/...">
+                            <input wire:model="video_url" type="url" class="w-full bg-black/50 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm text-white focus:border-[#E50914] outline-none transition-all placeholder:text-gray-700 font-medium" placeholder="https://domain.com/movie.mp4">
                         </div>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-tight leading-relaxed mt-2 p-3 bg-white/5 rounded-lg border border-white/5">
+                            <span class="text-[#E50914] block mb-1">PENTING:</span>
+                            Gunakan link video langsung (**mp4/m3u8**) agar fitur **Subtitle (CC)** lokal berfungsi. Jika Anda menggunakan link embed (seperti vidsrc), subtitle hanya bisa dikelola oleh penyedia link tersebut.
+                        </p>
                         @error('video_url') <span class="text-red-500 text-[10px] uppercase font-bold tracking-widest mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
@@ -99,6 +103,44 @@
                              <label for="posterFile" class="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest cursor-pointer transition-all border border-white/5">Cari File</label>
                         </div>
                         @error('posterFile') <span class="text-red-500 text-[10px] uppercase font-bold tracking-widest mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Subtitle Upload -->
+                    <div class="space-y-4 md:col-span-2 p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="text-[11px] text-white font-black uppercase tracking-widest mb-1 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[16px] text-[#E50914]">closed_caption</span>
+                                    Subtitle (CC)
+                                </h4>
+                                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Sangat direkomendasikan untuk film Direct Source</p>
+                            </div>
+                            @if ($subtitleFile)
+                                <div class="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px]">check_circle</span>
+                                    File Siap
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <input type="file" wire:model="subtitleFile" id="subtitleFile" class="hidden" accept=".vtt">
+                            <label for="subtitleFile" class="flex-1 border border-white/10 bg-black/50 rounded-xl px-5 py-4 cursor-pointer hover:bg-white/5 transition-all group flex items-center justify-between">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest group-hover:text-white transition-colors">
+                                    {{ $subtitleFile ? $subtitleFile->getClientOriginalName() : 'Pilih file subtitle (.vtt)' }}
+                                </span>
+                                <span class="material-symbols-outlined text-gray-600 group-hover:text-[#E50914] transition-colors">attach_file</span>
+                            </label>
+                            @if($subtitleFile)
+                                <button type="button" wire:click="$set('subtitleFile', null)" class="w-12 h-12 flex items-center justify-center bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            @endif
+                        </div>
+                        <div wire:loading wire:target="subtitleFile" class="text-[9px] text-[#E50914] font-black uppercase tracking-[2px] animate-pulse">
+                            Memproses file...
+                        </div>
+                        @error('subtitleFile') <span class="text-red-500 text-[10px] uppercase font-bold tracking-widest mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>
 

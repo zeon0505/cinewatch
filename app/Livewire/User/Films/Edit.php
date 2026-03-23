@@ -16,7 +16,7 @@ class Edit extends Component
     public $title, $description, $thumbnail, $video_url, $duration, $year;
     public $selectedCategories = [];
     public $audience_type = 'adult';
-    public $posterFile;
+    public $posterFile, $subtitleFile;
 
     protected $rules = [
         'title' => 'required|min:2',
@@ -24,6 +24,7 @@ class Edit extends Component
         'selectedCategories' => 'required|array|min:1',
         'audience_type' => 'required|in:adult,kids',
         'posterFile' => 'nullable|image|max:2048', // 2MB Max
+        'subtitleFile' => 'nullable|file|max:1024', // 1MB Max
     ];
 
     public function mount($id)
@@ -45,10 +46,16 @@ class Edit extends Component
         $this->validate();
 
         $thumbnailPath = $this->thumbnail;
+        $subtitlePath = $this->movie->subtitle_url;
 
         if ($this->posterFile) {
             $thumbnailPath = $this->posterFile->store('posters', 'public');
             $thumbnailPath = '/storage/' . $thumbnailPath;
+        }
+
+        if ($this->subtitleFile) {
+            $subtitlePath = $this->subtitleFile->store('subtitles', 'public');
+            $subtitlePath = '/storage/' . $subtitlePath;
         }
 
         $this->movie->update([
@@ -57,6 +64,7 @@ class Edit extends Component
             'description' => $this->description,
             'thumbnail' => $thumbnailPath,
             'video_url' => $this->video_url,
+            'subtitle_url' => $subtitlePath,
             'duration' => $this->duration,
             'year' => $this->year,
             'audience_type' => $this->audience_type,

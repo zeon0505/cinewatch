@@ -86,13 +86,13 @@
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">home</span>
                     <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Beranda Akun</span>
                 </a>
-                <a href="{{ route('user.films.index') }}" class="nav-item rounded-xl {{ request()->is('dashboard/films*') ? 'active' : '' }}" title="Kelola Film Saya">
+                <a href="{{ route('user.films.index') }}" class="nav-item rounded-xl {{ request()->is('dashboard/films*') ? 'active' : '' }}" title="Film">
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">video_library</span>
-                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Film Saya (CRUD)</span>
+                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Film</span>
                 </a>
-                <a href="{{ route('user.profile') }}" class="nav-item rounded-xl {{ request()->routeIs('user.profile') ? 'active' : '' }}" title="Pengaturan Profil">
+                <a href="{{ route('user.profile') }}" class="nav-item rounded-xl {{ request()->routeIs('user.profile') ? 'active' : '' }}" title="Profil">
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">person</span>
-                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Profil Profil</span>
+                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Profil</span>
                 </a>
             @endif
         </nav>

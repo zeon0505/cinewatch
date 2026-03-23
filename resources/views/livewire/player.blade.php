@@ -16,19 +16,66 @@
             
             <!-- Direct Video Source -->
             <template x-if="server === 'direct'">
-                <video 
-                    id="main-video"
-                    class="w-full h-full object-contain"
-                    controls
-                    src="{{ $movie->video_url }}"
-                    poster="{{ $movie->thumbnail }}"
-                ></video>
+                <div class="w-full h-full">
+                    @if($movie->video_url)
+                        <video 
+                            id="main-video"
+                            x-ref="player"
+                            x-init="
+                                const source = '{{ $movie->video_url }}';
+                                const video = $refs.player;
+                                const defaultOptions = { captions: { active: true, update: true, language: 'auto' } };
+
+                                if (source.endsWith('.m3u8')) {
+                                    if (Hls.isSupported()) {
+                                        const hls = new Hls();
+                                        hls.loadSource(source);
+                                        hls.attachMedia(video);
+                                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                                        video.src = source;
+                                    }
+                                } else {
+                                    video.src = source;
+                                }
+                                
+                                const player = new Plyr(video, defaultOptions);
+                                player.on('error', (event) => {
+                                    console.error('Plyr Error:', event);
+                                    alert('Gagal memutar video dari sumber ini. Pastikan link video valid dan mendukung akses langsung (bukan embed).');
+                                });
+                            "
+                            class="w-full h-full object-contain"
+                            controls
+                            playsinline
+                            poster="{{ $movie->thumbnail }}"
+                        >
+                            @if($movie->subtitle_url)
+                                <track label="Indonesian" kind="subtitles" srclang="id" src="{{ $movie->subtitle_url }}" default>
+                            @endif
+                        </video>
+                    @else
+                        <div class="w-full h-full flex flex-col items-center justify-center bg-zinc-900 text-center p-8">
+                            <span class="material-symbols-outlined text-6xl text-gray-700 mb-4 italic">video_stable</span>
+                            <h3 class="text-xl font-black uppercase tracking-widest text-gray-500 mb-2">Sumber Lokal Kosong</h3>
+                            <p class="text-xs text-gray-600 max-w-md font-bold uppercase tracking-tighter leading-relaxed">
+                                Fitur Subtitle (CC) mandiri hanya tersedia untuk "Server Lokal". Silakan masukkan link video langsung (.mp4/.m3u8) di dashboard kelola film untuk menggunakan server ini.
+                            </p>
+                        </div>
+                    @endif
+                </div>
             </template>
 
             <!-- API Embed Sources -->
             <template x-if="server === 'vidsrc'">
+                @php
+                    $vidsrcUrl = "https://vidsrc.to/embed/movie/" . ($movie->tmdb_id ?? '550');
+                    if ($movie->subtitle_url) {
+                        $subtitleUrl = route('subtitle.cors', $movie->id);
+                        $vidsrcUrl .= "?sub.file=" . urlencode($subtitleUrl) . "&sub.label=Indonesian";
+                    }
+                @endphp
                 <iframe 
-                    src="https://vidsrc.to/embed/movie/{{ $movie->tmdb_id ?? '550' }}" 
+                    src="{{ $vidsrcUrl }}" 
                     class="w-full h-full border-none"
                     allowfullscreen
                 ></iframe>
@@ -88,7 +135,7 @@
                     :class="server === 'direct' ? 'bg-[#E50914] text-white' : 'bg-white/5 text-gray-500 hover:text-white'"
                     class="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl"
                 >
-                    Direct Source
+                    Server Lokal (CC)
                 </button>
             </div>
         </div>

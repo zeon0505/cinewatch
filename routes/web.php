@@ -41,6 +41,27 @@ Route::get('/movie/{slug}', MovieDetail::class)->name('movie.detail');
 Route::get('/watch/{id}', Player::class)->name('movie.watch');
 Route::get('/category/{slug}', \App\Livewire\CategoryDetail::class)->name('category.detail');
 
+Route::get('/about', function() { return view('pages.about'); })->name('about');
+Route::get('/contact', function() { return view('pages.contact'); })->name('contact');
+
+// Subtitle CORS Proxy
+Route::get('/subtitle-cors/{id}', function($id) {
+    $movie = \App\Models\Movie::findOrFail($id);
+    if(!$movie->subtitle_url) abort(404);
+    
+    $path = public_path($movie->subtitle_url);
+    if(!file_exists($path)) {
+        $path = storage_path('app/public/' . str_replace('/storage/', '', $movie->subtitle_url));
+    }
+    
+    if(!file_exists($path)) abort(404);
+    
+    return response()->file($path, [
+        'Access-Control-Allow-Origin' => '*',
+        'Content-Type' => 'text/vtt',
+    ]);
+})->name('subtitle.cors');
+
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', function () {
         Auth::logout();

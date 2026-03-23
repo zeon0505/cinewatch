@@ -1,13 +1,13 @@
-<div class="h-full overflow-y-auto scrollbar-hide">
-    <div class="max-w-7xl mx-auto p-8 pt-0">
+<div>
+    <div class="max-w-7xl mx-auto">
         <!-- Header and Search Section -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 animate-fadeIn">
             <div>
                 <h1 class="text-4xl font-black text-white uppercase tracking-tighter logo">
-                    KELOLA <span class="text-[#E50914]">FILM SAYA</span>
+                    JELAJAH <span class="text-[#E50914]">FILM</span>
                 </h1>
                 <div class="flex items-center gap-3 mt-1">
-                    <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[3px] opacity-60">Pusat Distribusi Karya Kreator</p>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-[3px]">Katalog Film CINEWATCH</p>
                     @if($genreFilter || $search || $audienceFilter)
                         <button wire:click="clearFilter" class="bg-red-600/10 text-red-500 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all animate-pulse">
                             Bersihkan Filter (X)
@@ -17,21 +17,49 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-center gap-4 flex-1 justify-end max-w-3xl">
-                <!-- Dropdown Filters -->
-                <div class="flex gap-2 w-full sm:w-auto">
-                    <select wire:model.live="genreFilter" class="bg-white/[0.03] border border-white/5 rounded-xl px-4 py-4 text-xs font-bold text-gray-300 focus:border-red-600 outline-none transition-all cursor-pointer hover:bg-white/5 appearance-none">
-                        <option value="">Semua Kategori</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
+                <!-- Custom Dropdown Filters with AlpineJS -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <!-- Genre Custom Dropdown -->
+                    <div x-data="{ open: false }" @click.away="open = false" class="relative w-full sm:w-52 z-50">
+                        <button @click="open = !open" type="button" class="w-full bg-white/[0.03] border border-white/5 hover:border-red-600 rounded-xl px-5 py-4 text-xs font-bold text-gray-300 outline-none transition-all cursor-pointer flex justify-between items-center group shadow-inner">
+                            <span class="truncate uppercase tracking-widest text-[10px]">
+                                @if($genreFilter)
+                                    @php $g = $categories->firstWhere('id', $genreFilter); @endphp
+                                    {{ $g ? $g->name : 'Semua Kategori' }}
+                                @else
+                                    Semua Kategori
+                                @endif
+                            </span>
+                            <span class="material-symbols-outlined text-[16px] text-gray-500 group-hover:text-red-500 transition-transform" :class="open ? 'rotate-180 text-red-500' : ''">expand_more</span>
+                        </button>
+                        <div x-show="open" x-transition.opacity.duration.200ms class="absolute top-full left-0 mt-2 w-full bg-[#111111] border border-white/10 rounded-xl shadow-2xl py-2 max-h-64 overflow-y-auto custom-scrollbar z-50" style="display: none;">
+                            <button wire:click="$set('genreFilter', '')" @click="open = false" class="w-full text-left px-5 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 hover:text-white transition-colors {{ !$genreFilter ? 'text-[#E50914] bg-white/5' : 'text-gray-400' }}">
+                                Semua Kategori
+                            </button>
+                            <div class="border-t border-white/5 my-1"></div>
+                            @foreach($categories as $cat)
+                                <button wire:click="$set('genreFilter', '{{ $cat->id }}')" @click="open = false" class="w-full text-left px-5 py-3 text-[11px] font-bold tracking-widest hover:bg-white/5 hover:text-white transition-colors {{ $genreFilter == $cat->id ? 'text-[#E50914] bg-white/5 border-l-2 border-[#E50914]' : 'text-gray-400 border-l-2 border-transparent' }}">
+                                    {{ $cat->name }}
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
                     
-                    <select wire:model.live="audienceFilter" class="bg-white/[0.03] border border-white/5 rounded-xl px-4 py-4 text-xs font-bold text-gray-300 focus:border-red-600 outline-none transition-all cursor-pointer hover:bg-white/5 appearance-none">
-                        <option value="">Semua Umur (Kids & Adult)</option>
-                        <option value="kids">KIDS (Anak-anak)</option>
-                        <option value="adult">ADULT (Dewasa)</option>
-                    </select>
+
+                    <!-- Audience Toggle Buttons -->
+                    <div class="flex items-center gap-1.5 bg-white/[0.03] border border-white/5 rounded-xl p-1.5">
+                        <button wire:click="$set('audienceFilter', '')" class="px-4 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all {{ !$audienceFilter ? 'bg-white/10 text-white' : 'text-gray-500 hover:text-gray-300' }}">
+                            Semua
+                        </button>
+                        <button wire:click="$set('audienceFilter', 'kids')" class="flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all {{ $audienceFilter === 'kids' ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'text-gray-500 hover:text-yellow-400' }}">
+                            <span class="material-symbols-outlined text-[14px]">child_care</span> Kids
+                        </button>
+                        <button wire:click="$set('audienceFilter', 'adult')" class="flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all {{ $audienceFilter === 'adult' ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'text-gray-500 hover:text-red-400' }}">
+                            <span class="material-symbols-outlined text-[14px]">no_adult_content</span> Adult
+                        </button>
+                    </div>
                 </div>
+
 
                 <!-- Search -->
                 <div class="relative flex-1 group w-full sm:w-auto">
@@ -39,128 +67,137 @@
                     <input 
                         wire:model.live.debounce.300ms="search"
                         type="text" 
-                        placeholder="Search title..." 
+                        placeholder="Cari judul film..." 
                         class="w-full bg-white/[0.03] border border-white/5 rounded-xl pl-12 pr-6 py-4 text-xs font-bold text-white focus:border-red-600 outline-none transition-all"
                     />
                 </div>
-                
-                <a href="{{ route('user.films.create') }}" class="bg-[#E50914] text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-[2px] shadow-xl shadow-red-900/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3 shrink-0">
-                    <span class="material-symbols-outlined text-[18px]">cloud_upload</span> UNGGAH KARYA
-                </a>
             </div>
         </div>
 
-        @if (session()->has('message'))
-            <div class="bg-green-500/10 border border-green-500/20 text-green-500 p-4 rounded-xl text-[10px] uppercase font-black tracking-widest mb-8 animate-fadeIn">
-                <span class="material-symbols-outlined text-[16px] align-middle mr-2">check_circle</span> {{ session('message') }}
-            </div>
-        @endif
+        <div class="flex items-center gap-2 mb-6">
+            <span class="material-symbols-outlined text-white opacity-80">grid_view</span>
+            <h2 class="text-white font-black text-lg uppercase tracking-widest">Katalog Film</h2>
+        </div>
 
-        <!-- Film Table -->
-        <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="border-b border-white/5 text-[10px] font-black uppercase text-gray-500 tracking-[3px]">
-                        <th class="px-8 py-6">Karya & Identitas</th>
-                        <th class="px-8 py-6">Kategori / Genre</th>
-                        <th class="px-8 py-6">Filter Umur</th>
-                        <th class="px-8 py-6">Tahun</th>
-                        <th class="px-8 py-6 text-right">Opsi Operasional</th>
-                    </tr>
-                </thead>
-                <tbody class="text-sm text-gray-300">
-                    @forelse($films as $film)
-                    <tr class="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors group">
-                        <td class="px-8 py-5">
-                            <div class="flex items-center gap-6">
-                                <div class="w-16 h-20 rounded-lg overflow-hidden shrink-0 border border-white/10 group-hover:border-[#E50914] transition-colors">
-                                    <img src="{{ $film->thumbnail }}" class="w-full h-full object-cover" />
-                                </div>
-                                <div>
-                                    <p class="text-white font-black uppercase tracking-tight group-hover:text-[#E50914] transition-colors">{{ $film->title }}</p>
-                                    <p class="text-[9px] text-gray-600 font-bold uppercase tracking-widest mt-1">{{ $film->duration }} • {{ $film->views }} Views</p>
-                                </div>
+        <!-- Film Grid with Dropdown per Card -->
+        @php $watchlistMovieIds = $watchlists->pluck('movie_id')->toArray(); @endphp
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+            @forelse($films as $index => $film)
+                @php 
+                    $isInWatchlist = in_array($film->id, $watchlistMovieIds); 
+                    $isWatched = in_array($film->id, $histories);
+                @endphp
+                <div 
+                    x-data="{ open: false }" 
+                    @click.away="open = false" 
+                    class="animate-card relative rounded-2xl overflow-visible bg-[#141414] border border-white/5 transition-all duration-300 shadow-xl flex flex-col h-full group" 
+                    :class="open ? 'border-[#E50914] shadow-[0_20px_40px_rgba(229,9,20,0.2)]' : 'hover:border-[#E50914]/40 hover:-translate-y-1'"
+                    style="animation-delay: {{ $index * 50 }}ms"
+                >
+
+                    <!-- Clickable Card -->
+                    <button @click="open = !open" class="w-full text-left flex flex-col flex-1 focus:outline-none relative">
+                        <!-- Watched Indicator Badge -->
+                        @if($isWatched)
+                        <div class="absolute top-2 right-10 z-10 bg-green-500/80 backdrop-blur-sm text-white px-1.5 py-0.5 rounded text-[7px] font-black uppercase flex items-center gap-1 shadow-lg">
+                            <span class="material-symbols-outlined text-[8px]">check_circle</span>
+                            DITONTON
+                        </div>
+                        @endif
+
+                        <div class="relative aspect-[2/3] overflow-hidden rounded-t-2xl">
+                            <img src="{{ $film->thumbnail }}" alt="{{ $film->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                            <!-- Audience Badge -->
+                            <div class="absolute top-2 left-2">
+                                @if($film->audience_type === 'kids')
+                                    <span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[7px] font-black uppercase">KIDS</span>
+                                @elseif($film->audience_type === 'adult')
+                                    <span class="bg-red-600 text-white px-1.5 py-0.5 rounded text-[7px] font-black uppercase">ADULT</span>
+                                @endif
                             </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="flex flex-wrap gap-1.5 max-w-[200px]">
-                                @foreach($film->categories as $cat)
-                                    <button wire:click="$set('genreFilter', {{ $cat->id }})" class="bg-white/5 border border-white/10 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest text-gray-400 hover:bg-red-600 hover:text-white transition-all">{{ $cat->name }}</button>
-                                @endforeach
+
+                            <!-- Rating -->
+                            <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[9px] text-yellow-500">star</span>
+                                <span class="text-white text-[9px] font-black">{{ number_format($film->rating_value, 1) }}</span>
                             </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            @if($film->audience_type === 'kids')
-                                <button wire:click="$set('audienceFilter', 'kids')" class="bg-yellow-500/10 border border-yellow-500/20 text-yellow-600 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit hover:bg-yellow-500 hover:text-white transition-all">
-                                    <span class="material-symbols-outlined text-[12px]">child_care</span> KIDS
-                                </button>
-                            @else
-                                <button wire:click="$set('audienceFilter', 'adult')" class="bg-red-600/10 border border-red-600/20 text-red-600 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 w-fit hover:bg-red-600 hover:text-white transition-all">
-                                    <span class="material-symbols-outlined text-[12px]">no_adult_content</span> ADULT
-                                </button>
+
+                            <!-- Watchlist Indicator -->
+                            @if($isInWatchlist)
+                            <div class="absolute bottom-2 right-2 w-6 h-6 bg-[#E50914] rounded-full flex items-center justify-center shadow-lg">
+                                <span class="material-symbols-outlined text-[12px] text-white">bookmark</span>
+                            </div>
                             @endif
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="flex flex-col">
-                                <span class="text-white font-black text-xs uppercase">{{ $film->year }}</span>
-                                <div class="flex items-center gap-1 text-yellow-500">
-                                    <span class="material-symbols-outlined text-[12px]">star</span>
-                                    <span class="text-[10px] font-black">{{ number_format($film->rating_value, 1) }}</span>
-                                </div>
+
+                            <!-- Open hint -->
+                            <div class="absolute inset-0 flex items-end justify-center pb-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="bg-black/70 backdrop-blur-sm text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-white/10">Klik untuk opsi</span>
                             </div>
-                        </td>
-                        <td class="px-8 py-5">
-                            <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('user.films.edit', $film->id) }}" class="w-10 h-10 bg-blue-500/10 text-blue-500 rounded-lg flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all">
-                                    <span class="material-symbols-outlined text-[18px]">edit_note</span>
-                                </a>
-                                <button wire:click="confirmDelete({{ $film->id }})" class="w-10 h-10 bg-red-600/10 text-red-600 rounded-lg flex items-center justify-center hover:bg-red-600 hover:text-white transition-all">
-                                    <span class="material-symbols-outlined text-[18px]">delete_forever</span>
-                                </button>
+                        </div>
+
+                        <div class="p-3 flex flex-col flex-1 justify-between">
+                            <h3 class="text-white font-black text-[11px] uppercase tracking-tight line-clamp-2 leading-snug" :class="open ? 'text-[#E50914]' : ''">{{ $film->title }}</h3>
+                            <div class="flex items-center gap-1.5 mt-1.5 text-gray-500 font-bold text-[8px] uppercase tracking-widest">
+                                <span>{{ $film->year }}</span>
+                                <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                                <span>{{ $film->duration }}</span>
                             </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-8 py-20 text-center text-gray-700 italic uppercase font-black text-xs tracking-[5px]">
-                            <span class="material-symbols-outlined text-5xl mb-4 block">folder_off</span> Belum Ada Karya Yang Anda Unggah
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        </div>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="absolute bottom-0 left-0 right-0 bg-[#1a1a1a] border border-white/10 border-t-0 rounded-b-2xl z-50 overflow-hidden shadow-2xl" style="display:none">
+                        <a href="{{ route('movie.detail', $film->slug) }}" class="flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-gray-300 hover:bg-[#E50914] hover:text-white transition-all border-b border-white/5">
+                            <span class="material-symbols-outlined text-[16px]">play_circle</span> Lihat Film
+                        </a>
+                        <button wire:click="toggleWatchlist({{ $film->id }})" @click="open = false" class="w-full flex items-center gap-3 px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all border-b border-white/5 {{ $isInWatchlist ? 'text-[#E50914] hover:bg-red-600/10' : 'text-gray-300 hover:bg-white/5' }}">
+                            <span class="material-symbols-outlined text-[16px]">{{ $isInWatchlist ? 'bookmark_remove' : 'bookmark_add' }}</span>
+                            {{ $isInWatchlist ? 'Hapus dari Watchlist' : 'Tambah ke Watchlist' }}
+                        </button>
+                        <div class="px-4 py-3 bg-white/[0.02] flex items-center justify-between">
+                            <span class="text-[9px] font-bold uppercase tracking-[2px] text-gray-500">History</span>
+                            @if($isWatched)
+                                <span class="text-[9px] font-black uppercase text-green-500 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px]">check_circle</span> Sudah
+                                </span>
+                            @else
+                                <span class="text-[9px] font-black uppercase text-gray-600 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[12px]">schedule</span> Belum
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full py-32 text-center text-gray-500 border border-dashed border-white/10 rounded-3xl bg-white/[0.02]">
+                    <div class="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                        <span class="material-symbols-outlined text-5xl text-gray-600">movie_off</span>
+                    </div>
+                    <p class="text-white font-black text-lg uppercase tracking-widest mb-2">Tidak Ada Film</p>
+                    <p class="italic text-[11px] font-bold tracking-[2px] mb-8">Film yang Anda cari tidak ditemukan sesuai filter.</p>
+                    <button wire:click="clearFilter" class="inline-block bg-[#E50914] text-white px-8 py-3 rounded-lg font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-900/40 hover:scale-105 transition-all">
+                        Hapus Filter Pencarian
+                    </button>
+                </div>
+            @endforelse
         </div>
         
-        <div class="mt-8">
+        <div class="mt-12 flex justify-center">
             {{ $films->links() }}
         </div>
     </div>
 
-    <!-- Custom Themed Deletion Modal -->
-    @if($confirmingDeletion)
-    <div class="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md animate-fadeIn">
-        <div class="w-full max-w-md bg-neutral-900 border border-white/10 rounded-3xl p-10 text-center shadow-[0_0_100px_rgba(229,9,20,0.3)] animate-cardSlide">
-            <div class="w-20 h-20 bg-red-600/10 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                <span class="material-symbols-outlined text-4xl">warning</span>
-            </div>
-            <h3 class="text-2xl font-black text-white uppercase tracking-tighter mb-4" style="font-family:'Bebas Neue',sans-serif">Hapus Karya Permanen?</h3>
-            <p class="text-gray-500 text-[11px] font-bold uppercase tracking-widest leading-relaxed mb-10 italic">"Tindakan ini akan menghapus data film dari koleksimu selamanya. Operasi tidak dapat dibatalkan."</p>
-            <div class="flex gap-4">
-                <button wire:click="$set('confirmingDeletion', false)" class="flex-1 bg-white/5 border border-white/10 text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all">
-                    Batal
-                </button>
-                <button wire:click="deleteFilm" class="flex-1 bg-red-600 text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-red-900/30 hover:bg-red-700 transition-all">
-                    Hapus Permanen
-                </button>
-            </div>
-        </div>
-    </div>
-    @endif
-
     <style>
         .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(229,9,20,0.5); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(229,9,20,0.8); }
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes cardSlide { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
     </style>
 </div>

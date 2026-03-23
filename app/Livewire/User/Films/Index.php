@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Movie;
 use App\Models\Category;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
 
 class Index extends Component
 {
@@ -14,9 +15,6 @@ class Index extends Component
     public $search = '';
     public $genreFilter = null;
     public $audienceFilter = null;
-    public $confirmingDeletion = false;
-    public $filmIdBeingDeleted = null;
-
     public function mount()
     {
         if (request()->has('genre')) {
@@ -31,22 +29,19 @@ class Index extends Component
         $this->search = '';
     }
 
-    public function confirmDelete($id)
+    public function toggleWatchlist($movieId)
     {
-        $this->filmIdBeingDeleted = $id;
-        $this->confirmingDeletion = true;
-    }
+        $existing = \App\Models\Watchlist::where('user_id', auth()->id())
+            ->where('movie_id', $movieId)
+            ->first();
 
-    public function deleteFilm()
-    {
-        if ($this->filmIdBeingDeleted) {
-            $movie = Movie::where('user_id', auth()->id())->find($this->filmIdBeingDeleted);
-            if ($movie) {
-                $movie->delete();
-                session()->flash('message', 'Film berhasil dihapus dari koleksimu.');
-            }
-            $this->confirmingDeletion = false;
-            $this->filmIdBeingDeleted = null;
+        if ($existing) {
+            $existing->delete();
+        } else {
+            \App\Models\Watchlist::create([
+                'user_id' => auth()->id(),
+                'movie_id' => $movieId,
+            ]);
         }
     }
 
@@ -56,7 +51,6 @@ class Index extends Component
         $categories = Category::orderBy('name')->get();
         
         $films = Movie::with('categories')
-            ->where('user_id', auth()->id())
             ->when($this->search, function($q) {
                 $q->where('title', 'like', '%' . $this->search . '%');
             })
@@ -71,8 +65,17 @@ class Index extends Component
                 $q->where('audience_type', $this->audienceFilter);
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(12);
 
-        return view('livewire.user.films.index', compact('films', 'categories'));
+        $watchlists = \App\Models\Watchlist::with(['movie', 'movie.categories'])
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        $histories = \App\Models\History::where('user_id', auth()->id())
+            ->pluck('movie_id')
+            ->toArray();
+
+        return view('livewire.user.films.index', compact('films', 'categories', 'watchlists', 'histories'));
     }
 }

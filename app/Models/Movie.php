@@ -16,6 +16,7 @@ class Movie extends Model
         'description', 
         'thumbnail', 
         'video_url', 
+        'subtitle_url',
         'duration', 
         'age_rating',
         'audience_type',

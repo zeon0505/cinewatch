@@ -8,6 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Plyr Player -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root {
             --red: #E50914;
@@ -91,8 +96,8 @@
                 <div>
                     <p class="text-white font-semibold mb-3 text-xs uppercase tracking-widest">Informasi</p>
                     <ul class="space-y-2">
-                        <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-white">Kontak</a></li>
+                        <li><a href="{{ route('about') }}" class="hover:text-white transition-colors">Tentang Kami</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-white transition-colors">Kontak</a></li>
                     </ul>
                 </div>
             </div>
