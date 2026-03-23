@@ -10,6 +10,7 @@ class Movie extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'title', 
         'slug', 
         'description', 
@@ -25,6 +26,11 @@ class Movie extends Model
         'year',
         'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function categories()
     {

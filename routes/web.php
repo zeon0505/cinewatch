@@ -54,6 +54,11 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::get('/profile', \App\Livewire\User\Profile::class)->name('user.profile');
+
+    // Fitur Kelola Film Khusus User
+    Route::get('/dashboard/films', \App\Livewire\User\Films\Index::class)->name('user.films.index');
+    Route::get('/dashboard/films/create', \App\Livewire\User\Films\Create::class)->name('user.films.create');
+    Route::get('/dashboard/films/edit/{id}', \App\Livewire\User\Films\Edit::class)->name('user.films.edit');
 });
 
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->group(function () {
