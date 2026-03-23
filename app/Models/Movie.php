@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Movie extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'title', 
+        'slug', 
+        'description', 
+        'thumbnail', 
+        'video_url', 
+        'duration', 
+        'age_rating',
+        'audience_type',
+        'rating_value',
+        'category_id', // Keeping for now to avoid breaking existing code during migration
+        'views',
+        'tmdb_id',
+        'year',
+        'status'
+    ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function watchlists()
+    {
+        return $this->hasMany(Watchlist::class);
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(History::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+}

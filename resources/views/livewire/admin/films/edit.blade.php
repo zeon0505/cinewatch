@@ -1,0 +1,147 @@
+<div class="h-full overflow-y-auto scrollbar-hide">
+    <div class="max-w-6xl mx-auto p-8 pt-0">
+        <!-- Header Section -->
+        <div class="flex items-center gap-8 mb-12 animate-fadeIn">
+            <a href="{{ route('admin.films.index') }}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-[#E50914] hover:border-transparent transition-all shadow-xl">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </a>
+            <div>
+                <h2 class="text-4xl font-black text-white uppercase tracking-tighter logo">CINEWATCH <span class="text-red-600">ENGINE</span></h2>
+                <p class="text-gray-500 font-bold text-[10px] uppercase tracking-[4px] mt-2 border-l-2 border-red-600 pl-4">Update Distribusi: {{ $title }}</p>
+            </div>
+        </div>
+
+        @if (session()->has('message'))
+            <div class="bg-green-500/10 border border-green-500/20 text-green-500 p-5 rounded-2xl text-[10px] uppercase font-black tracking-widest mb-10 animate-fadeIn">
+                <span class="material-symbols-outlined text-[18px] align-middle mr-2">verified</span> {{ session('message') }}
+            </div>
+        @endif
+
+        <form wire:submit.prevent="update" class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <!-- Main Info (Left) -->
+            <div class="lg:col-span-2 space-y-10">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl relative overflow-hidden group">
+                    <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
+                         <span class="material-symbols-outlined text-[#E50914]">description</span>
+                         <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Metadata Utama</h3>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Judul Film</label>
+                            <input wire:model="title" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
+                            @error('title') <span class="text-red-500 text-[9px] font-bold mt-2 block">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Deskripsi Narasi</label>
+                            <textarea wire:model="description" rows="5" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800"></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div>
+                                <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Tahun Rilis</label>
+                                <input wire:model="year" type="number" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Durasi</label>
+                                <input wire:model="duration" type="text" placeholder="1h 45m" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Rating Skor</label>
+                                <div class="relative">
+                                    <span class="material-symbols-outlined absolute left-4 top-4 text-yellow-500 text-sm">star</span>
+                                    <input wire:model="rating_value" type="number" step="0.1" max="10" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 pl-12 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl">
+                    <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
+                         <span class="material-symbols-outlined text-[#E50914]">video_library</span>
+                         <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Media Streaming</h3>
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Alamat Sumber Video (URL)</label>
+                        <div class="relative">
+                            <input wire:model="video_url" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 pl-12 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
+                            <span class="material-symbols-outlined absolute left-4 top-4 text-gray-700">link</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar (Right) -->
+            <div class="space-y-10">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl text-center">
+                    <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6 justify-center">
+                         <span class="material-symbols-outlined text-[#E50914]">image</span>
+                         <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Thumbnail</h3>
+                    </div>
+                    
+                    <div class="mb-8 p-3 bg-black/50 border border-white/5 rounded-2xl relative group overflow-hidden">
+                        <img src="{{ $thumbnail }}" class="w-full aspect-[2/3] object-cover rounded-xl shadow-2xl opacity-60 group-hover:opacity-100 transition-all group-hover:scale-105" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4">Ubah Alamat Gambar</label>
+                        <input wire:model="thumbnail" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-[10px] text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold" />
+                    </div>
+                </div>
+
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl">
+                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
+                         <span class="material-symbols-outlined text-red-600">category</span>
+                         <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Genre & Kategori</h3>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2 max-h-[220px] overflow-y-auto custom-scrollbar p-1">
+                        @foreach(\App\Models\Category::all() as $cat)
+                        <label class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] cursor-pointer transition-all group has-[:checked]:bg-red-600/10 has-[:checked]:border-red-600/30">
+                            <input type="checkbox" wire:model="selectedCategories" value="{{ $cat->id }}" class="hidden peer">
+                            <div class="w-5 h-5 rounded border-2 border-white/10 flex items-center justify-center peer-checked:bg-red-600 peer-checked:border-red-600 transition-all">
+                                <span class="material-symbols-outlined text-white text-[14px] scale-0 peer-checked:scale-100 transition-transform">check</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-gray-400 group-hover:text-white peer-checked:text-white uppercase tracking-wider">{{ $cat->name }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl">
+                    <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
+                         <span class="material-symbols-outlined text-red-600">no_adult_content</span>
+                         <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Target Penonton</h3>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <label class="cursor-pointer group flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5 transition-all group-hover:bg-white/[0.05] has-[:checked]:bg-red-600/10 has-[:checked]:border-red-600/50">
+                            <input type="radio" wire:model="audience_type" value="adult" class="hidden">
+                            <span class="material-symbols-outlined text-gray-500 group-has-[:checked]:text-red-500 transition-colors">no_adult_content</span>
+                            <p class="text-[10px] font-black uppercase text-gray-400 group-has-[:checked]:text-white">DEWASA (ADULT)</p>
+                        </label>
+                        <label class="cursor-pointer group flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5 transition-all group-hover:bg-white/[0.05] has-[:checked]:bg-yellow-500/10 has-[:checked]:border-yellow-500/50">
+                            <input type="radio" wire:model="audience_type" value="kids" class="hidden">
+                            <span class="material-symbols-outlined text-gray-500 group-has-[:checked]:text-yellow-500 transition-colors">child_care</span>
+                            <p class="text-[10px] font-black uppercase text-gray-400 group-has-[:checked]:text-white">ANAK (KIDS)</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <button type="submit" class="w-full bg-[#E50914] text-white py-5 rounded-xl font-black uppercase text-[11px] tracking-[4px] shadow-[0_15px_35px_rgba(229,9,20,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                        <span class="material-symbols-outlined">save</span> Perbarui Data
+                    </button>
+                    <p class="text-center text-[9px] text-gray-700 font-bold uppercase tracking-[3px] italic">Terakhir diperbarui: {{ \Carbon\Carbon::now()->format('d M Y') }}</p>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
+    </style>
+</div>
