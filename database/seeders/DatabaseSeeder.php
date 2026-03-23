@@ -15,20 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin
-        User::create([
-            'name' => 'Admin CineVault',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('password'),
-            'role' => 'admin'
-        ]);
-
-        // Regular User
-        User::create([
-            'name' => 'John Doe',
-            'email' => 'user@gmail.com',
-            'password' => bcrypt('password'),
-            'role' => 'user'
+        // Call specific seeders
+        $this->call([
+            UserSeeder::class,
         ]);
 
         // Categories
