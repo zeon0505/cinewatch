@@ -37,6 +37,19 @@
                  </div>
             </div>
 
+            <div class="border-t border-white/5 pt-10">
+                 <h3 class="text-lg font-black text-white uppercase tracking-widest mb-6 border-b border-white/5 pb-4">Hero Slider</h3>
+                 <div>
+                      <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2">Featured Films (Maksimal 3 direkomendasikan)</label>
+                      <select multiple wire:model="featured_film_ids" class="w-full bg-black/40 border border-white/5 rounded-xl p-3.5 text-white focus:ring-2 focus:ring-red-600 outline-none text-sm h-48">
+                          @foreach($movies as $movie)
+                              <option value="{{ $movie->id }}">{{ $movie->title }}</option>
+                          @endforeach
+                      </select>
+                      <p class="text-gray-500 mt-2 text-[10px] italic">Tahan tombol Ctrl (Windows) atau Cmd (Mac) untuk memilih lebih dari satu.</p>
+                 </div>
+            </div>
+
             <div class="flex justify-end pt-10 border-t border-white/5">
                  <button type="submit" class="px-14 py-4 bg-white hover:bg-red-600 hover:text-white text-black rounded-xl font-black text-xs uppercase tracking-widest shadow-2xl transition-all active:scale-95">Simpan Konfigurasi</button>
             </div>

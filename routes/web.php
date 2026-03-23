@@ -15,8 +15,24 @@ Route::get('/', function () {
     $trendingMovies = Movie::orderBy('views', 'desc')->take(10)->get();
     $latestMovies = Movie::latest()->take(10)->get();
     $categories = Category::all();
-    $heroMovie = Movie::first(); // Asumsi film pertama sebagai hero
-    return view('welcome', compact('trendingMovies', 'latestMovies', 'categories', 'heroMovie'));
+    
+    $featuredFilmIds = [];
+    if (\Illuminate\Support\Facades\Storage::disk('local')->exists('settings.json')) {
+        $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('settings.json'), true);
+        $featuredFilmIds = $settings['featured_film_ids'] ?? [];
+    }
+
+    if (!empty($featuredFilmIds)) {
+        $heroMovies = Movie::whereIn('id', $featuredFilmIds)->get();
+    } else {
+        $heroMovies = collect();
+    }
+
+    if ($heroMovies->isEmpty()) {
+        $heroMovies = Movie::latest()->take(3)->get();
+    }
+
+    return view('welcome', compact('trendingMovies', 'latestMovies', 'categories', 'heroMovies'));
 });
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/register', Register::class)->name('register')->middleware('guest');

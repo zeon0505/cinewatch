@@ -122,20 +122,29 @@
     </div>
 </nav>
 
-<section class="hero-section">
-    <div class="hero-video-bg">
-        <img src="{{ $heroMovie->thumbnail ?? 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1800&q=80' }}" alt="hero-bg" />
-    </div>
-    <div class="hero-overlay"></div>
-    
-    <div class="relative z-10 px-10 md:px-20 max-w-4xl">
-        @if($heroMovie)
+<section class="hero-section" x-data="{ activeSlide: 0, slides: {{ count($heroMovies) }}, autoPlayInterval: null }" x-init="autoPlayInterval = setInterval(() => activeSlide = (activeSlide + 1) % slides, 6000)">
+    @foreach($heroMovies as $index => $heroMovie)
+    <div x-show="activeSlide === {{ $index }}"
+         x-transition:enter="transition ease-out duration-1000"
+         x-transition:enter-start="opacity-0 scale-105"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-1000 absolute inset-0"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="absolute inset-0 w-full h-full">
+        
+        <div class="hero-video-bg">
+            <img src="{{ $heroMovie->thumbnail ?? 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1800&q=80' }}" alt="hero-bg" class="w-full h-full object-cover" />
+        </div>
+        <div class="hero-overlay"></div>
+        
+        <div class="absolute inset-0 z-10 flex flex-col justify-center px-10 md:px-20 max-w-4xl">
             <div class="animate-fadeIn scale-entrance">
                 <span class="tag">Exclusive Billboard</span>
                 <h1 class="text-6xl md:text-8xl font-black leading-[0.85] mb-6 tracking-tighter uppercase" style="font-family:'Bebas Neue',sans-serif">
                     {{ $heroMovie->title }}
                 </h1>
-                <p class="text-gray-300 text-sm md:text-base max-w-xl leading-relaxed mb-8 opacity-70 font-light italic">
+                <p class="text-gray-300 text-sm md:text-base max-w-xl leading-relaxed mb-8 opacity-70 font-light italic drop-shadow-lg">
                     "{{ $heroMovie->description }}"
                 </p>
                 <div class="flex gap-4">
@@ -149,7 +158,17 @@
                     @endauth
                 </div>
             </div>
-        @endif
+        </div>
+    </div>
+    @endforeach
+
+    <!-- Pagination Dots -->
+    <div class="absolute bottom-24 left-10 md:left-20 z-20 flex gap-3">
+        @foreach($heroMovies as $index => $heroMovie)
+        <button @click="activeSlide = {{ $index }}; clearInterval(autoPlayInterval); autoPlayInterval = setInterval(() => activeSlide = (activeSlide + 1) % slides, 6000)"
+                :class="{'w-8 bg-[#E50914]': activeSlide === {{ $index }}, 'w-2 bg-white/50 hover:bg-white': activeSlide !== {{ $index }}}"
+                class="h-2 rounded-full transition-all duration-300 shadow-lg" aria-label="Go to slide {{ $index + 1 }}"></button>
+        @endforeach
     </div>
 </section>
 
