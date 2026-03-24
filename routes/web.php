@@ -11,6 +11,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use App\Models\History;
 use Illuminate\Support\Facades\Artisan;
+use App\Livewire\User\Subscription;
 
 Route::get('/', function () {
     $isKids = session('is_kids_mode', false);
@@ -70,7 +71,7 @@ Route::get('/register', Register::class)->name('register')->middleware('guest');
 
 Route::get('/movie/{slug}', MovieDetail::class)->name('movie.detail');
 Route::get('/watch/{id}', Player::class)->name('movie.watch');
-Route::get('/vip', \App\Livewire\User\Subscription::class)->name('subscription');
+Route::get('/vip', Subscription::class)->name('subscription');
 Route::get('/profiles', \App\Livewire\Auth\ProfileSelection::class)->name('profiles')->middleware('auth');
 Route::get('/trending', \App\Livewire\Trending::class)->name('trending');
 Route::get('/new-releases', \App\Livewire\NewReleases::class)->name('new.releases');
