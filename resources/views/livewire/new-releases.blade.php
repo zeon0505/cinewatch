@@ -49,7 +49,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-20">
-        {{ $movies->links() }}
+    <div class="mt-20 flex justify-center">
+        {{ $movies->links('livewire.user.films.pagination-premium') }}
     </div>
 </div>

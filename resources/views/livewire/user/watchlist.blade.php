@@ -59,8 +59,8 @@
                 @endforeach
             </div>
 
-            <div class="mt-16">
-                {{ $watchlists->links() }}
+            <div class="mt-16 flex justify-center">
+                {{ $watchlists->links('livewire.user.films.pagination-premium') }}
             </div>
         @endif
     </div>

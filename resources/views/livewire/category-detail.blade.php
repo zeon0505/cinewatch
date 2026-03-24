@@ -47,8 +47,8 @@
     </div>
 
     <!-- Pagination -->
-    <div class="max-w-7xl mx-auto mt-20">
-        {{ $movies->links() }}
+    <div class="max-w-7xl mx-auto mt-20 flex justify-center">
+        {{ $movies->links('livewire.user.films.pagination-premium') }}
     </div>
 
     <style>

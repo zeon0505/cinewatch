@@ -112,8 +112,8 @@
             </table>
         </div>
         
-        <div class="mt-8">
-            {{ $films->links() }}
+        <div class="mt-8 flex justify-center">
+            {{ $films->links('livewire.user.films.pagination-premium') }}
         </div>
     </div>
 
