@@ -7,54 +7,60 @@
     </div>
     
     <!-- Professional Register Container -->
-    <div class="relative z-10 w-full max-w-[560px] bg-neutral-900 shadow-[0_0_80px_rgba(0,0,0,0.8)] border border-white/5 rounded-2xl p-10 md:p-12 animate-cardSlide">
-        <div class="text-center mb-10">
-            <h1 class="logo text-4xl text-[#E50914] mb-3 tracking-[3px] font-black animate-fadeIn delay-1">CINEWATCH</h1>
-            <h2 class="text-white text-xl font-bold uppercase tracking-tight animate-fadeIn delay-2">Daftar Member Premium</h2>
-            <p class="text-[10px] text-gray-500 mt-2 font-bold uppercase tracking-[2px] animate-fadeIn delay-3 opacity-60">Nikmati Akses Film Tanpa Batas</p>
+    <div class="relative z-10 w-full max-w-[560px] bg-neutral-900 shadow-[0_0_80px_rgba(0,0,0,0.8)] border border-white/5 rounded-2xl p-5 md:p-12 animate-cardSlide overflow-hidden">
+        <!-- Back Button -->
+        <a href="/" class="absolute top-4 left-4 text-gray-500 hover:text-white transition-colors duration-300 flex items-center gap-1 group">
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+            <span class="text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Beranda</span>
+        </a>
+
+        <div class="text-center mb-5 md:mb-10 pt-2">
+            <h1 class="logo text-2xl md:text-4xl text-[#E50914] mb-1.5 md:mb-3 tracking-[3px] font-black animate-fadeIn delay-1">CINEWATCH</h1>
+            <h2 class="text-white text-base md:text-xl font-bold uppercase tracking-tight animate-fadeIn delay-2">Daftar Member Premium</h2>
+            <p class="text-[8px] md:text-[10px] text-gray-500 mt-1 md:mt-2 font-bold uppercase tracking-[2px] animate-fadeIn delay-3 opacity-60">Nikmati Akses Film Tanpa Batas</p>
         </div>
 
-        <form wire:submit.prevent="register" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form wire:submit.prevent="register" class="space-y-3 md:space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                 <div class="animate-fadeIn delay-4">
-                    <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[1.5px] mb-2 ml-1">Nama Lengkap</label>
+                    <label class="block text-gray-400 text-[9px] md:text-[10px] font-black uppercase tracking-[1.5px] mb-1.5 ml-1">Nama Lengkap</label>
                     <input wire:model="name" type="text" placeholder="Budi Santoso" 
-                           class="w-full h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
+                           class="w-full h-9 md:h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
                     @error('name') <span class="text-red-500 text-[9px] ml-1 mt-1 block font-bold uppercase">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="animate-fadeIn delay-5">
-                    <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[1.5px] mb-2 ml-1">Username</label>
+                    <label class="block text-gray-400 text-[9px] md:text-[10px] font-black uppercase tracking-[1.5px] mb-1.5 ml-1">Username</label>
                     <input wire:model="username" type="text" placeholder="budi_s" 
-                           class="w-full h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
+                           class="w-full h-9 md:h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
                     @error('username') <span class="text-red-500 text-[9px] ml-1 mt-1 block font-bold uppercase">{{ $message }}</span> @enderror
                 </div>
             </div>
 
             <div class="animate-fadeIn delay-6">
-                <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[1.5px] mb-2 ml-1">Alamat Email Aktif</label>
+                <label class="block text-gray-400 text-[9px] md:text-[10px] font-black uppercase tracking-[1.5px] mb-1.5 ml-1">Alamat Email Aktif</label>
                 <input wire:model="email" type="email" placeholder="nama@email.com" 
-                       class="w-full h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
+                       class="w-full h-9 md:h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
                 @error('email') <span class="text-red-500 text-[9px] ml-1 mt-1 block font-bold uppercase">{{ $message }}</span> @enderror
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                 <div class="animate-fadeIn delay-7">
-                    <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[1.5px] mb-2 ml-1">Password</label>
+                    <label class="block text-gray-400 text-[9px] md:text-[10px] font-black uppercase tracking-[1.5px] mb-1.5 ml-1">Password</label>
                     <input wire:model="password" type="password" placeholder="••••••••" 
-                           class="w-full h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
+                           class="w-full h-9 md:h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
                     @error('password') <span class="text-red-500 text-[9px] ml-1 mt-1 block font-bold uppercase">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="animate-fadeIn delay-8">
-                    <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[1.5px] mb-2 ml-1">Konfirmasi</label>
+                    <label class="block text-gray-400 text-[9px] md:text-[10px] font-black uppercase tracking-[1.5px] mb-1.5 ml-1">Konfirmasi</label>
                     <input wire:model="password_confirmation" type="password" placeholder="••••••••" 
-                           class="w-full h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
+                           class="w-full h-9 md:h-11 bg-neutral-800 border border-white/10 rounded-lg px-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-neutral-700 outline-none transition-all placeholder:text-gray-700 text-sm" />
                 </div>
             </div>
 
             <button type="submit" wire:loading.attr="disabled" 
-                    class="w-full bg-[#E50914] hover:bg-[#B20710] py-4 rounded-lg text-white font-black text-xs uppercase tracking-[4px] transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-xl animate-fadeIn delay-9">
+                    class="w-full bg-[#E50914] hover:bg-[#B20710] py-3 md:py-4 rounded-lg text-white font-black text-xs uppercase tracking-[4px] transition-all transform hover:scale-[1.01] active:scale-[0.99] shadow-xl animate-fadeIn delay-9">
                 <span wire:loading.remove>Daftar Membership</span>
                 <span wire:loading class="flex items-center justify-center">
                     <svg class="animate-spin h-4 w-4 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -63,8 +69,8 @@
             </button>
         </form>
 
-        <div class="mt-8 pt-8 border-t border-white/5 text-center animate-fadeIn delay-10">
-            <p class="text-gray-600 text-[10px] font-black uppercase tracking-widest leading-relaxed">Sudah menjadi member?<br>
+        <div class="mt-5 pt-5 md:mt-8 md:pt-8 border-t border-white/5 text-center animate-fadeIn delay-10">
+            <p class="text-gray-600 text-[9px] md:text-[10px] font-black uppercase tracking-widest leading-relaxed">Sudah menjadi member?<br>
                 <a href="/login" class="text-white hover:text-[#E50914] transition-colors mt-2 block tracking-[4px]">Masuk ke Akun</a>
             </p>
         </div>

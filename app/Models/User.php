@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'avatar', 'status'])]
+#[Fillable(['name', 'email', 'password', 'role', 'avatar', 'status', 'is_vip', 'vip_until'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -27,6 +27,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'vip_until' => 'datetime',
         ];
     }
 
@@ -43,5 +44,18 @@ class User extends Authenticatable
     public function ratings()
     {
         return $this->hasMany(Rating::class);
+    }
+
+    public function profiles()
+    {
+        return $this->hasMany(Profile::class);
+    }
+
+    public function getIsVipAttribute($value)
+    {
+        if (!$value) return false;
+        if (!$this->vip_until) return false;
+        
+        return now()->lt($this->vip_until);
     }
 }

@@ -228,6 +228,25 @@
                         </div>
                     </div>
 
+                    <!-- VIP ONLY TOGGLE -->
+                    <div class="mt-8">
+                        <label class="flex items-center justify-between p-4 rounded-2xl bg-yellow-500/5 border border-yellow-500/20 cursor-pointer hover:bg-yellow-500/10 transition-all group">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-500">
+                                    <span class="material-symbols-outlined">workspace_premium</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] font-black uppercase text-yellow-500 tracking-widest">Konten VIP</span>
+                                    <span class="text-[8px] text-gray-600 font-bold uppercase">Hanya untuk member berbayar</span>
+                                </div>
+                            </div>
+                            <div class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" wire:model="is_premium" class="sr-only peer">
+                                <div class="w-11 h-6 bg-white/5 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-500 peer-checked:after:bg-yellow-500 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500/20"></div>
+                            </div>
+                        </label>
+                    </div>
+
                     <!-- RATING & YEAR -->
                     <div class="grid grid-cols-2 gap-6 mt-8">
                         <div class="space-y-2">

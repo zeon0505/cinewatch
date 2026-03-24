@@ -9,12 +9,38 @@ use App\Livewire\Auth\Register;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Movie;
 use App\Models\Category;
+use App\Models\History;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
-    $trendingMovies = Movie::orderBy('views', 'desc')->take(10)->get();
-    $latestMovies = Movie::latest()->take(10)->get();
-    $categories = Category::all();
+    $isKids = session('is_kids_mode', false);
+    
+    $trendingMovies = Movie::when($isKids, fn($q) => $q->kids())
+        ->orderBy('views', 'desc')
+        ->take(10)
+        ->get();
+        
+    $latestMovies = Movie::when($isKids, fn($q) => $q->kids())
+        ->latest()
+        ->take(10)
+        ->get();
+
+    $continueWatching = collect();
+    if (Auth::check()) {
+        $continueWatching = History::where('user_id', Auth::id())
+            ->where('progress', '>', 0)
+            ->with(['movie' => function($q) use ($isKids) {
+                $q->when($isKids, fn($query) => $query->kids());
+            }])
+            ->whereHas('movie')
+            ->orderBy('last_watched', 'desc')
+            ->take(10)
+            ->get();
+    }
+        
+    $categories = Category::withCount(['movies' => function($q) use ($isKids) {
+        $q->when($isKids, fn($query) => $query->kids());
+    }])->get();
     
     $featuredFilmIds = [];
     if (\Illuminate\Support\Facades\Storage::disk('local')->exists('settings.json')) {
@@ -23,26 +49,43 @@ Route::get('/', function () {
     }
 
     if (!empty($featuredFilmIds)) {
-        $heroMovies = Movie::whereIn('id', $featuredFilmIds)->get();
+        $heroMovies = Movie::when($isKids, fn($q) => $q->kids())
+            ->whereIn('id', $featuredFilmIds)
+            ->get();
     } else {
         $heroMovies = collect();
     }
 
     if ($heroMovies->isEmpty()) {
-        $heroMovies = Movie::latest()->take(3)->get();
+        $heroMovies = Movie::when($isKids, fn($q) => $q->kids())
+            ->latest()
+            ->take(3)
+            ->get();
     }
 
-    return view('welcome', compact('trendingMovies', 'latestMovies', 'categories', 'heroMovies'));
-});
+    return view('welcome', compact('trendingMovies', 'latestMovies', 'categories', 'heroMovies', 'continueWatching'));
+})->name('home');
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/register', Register::class)->name('register')->middleware('guest');
 
 Route::get('/movie/{slug}', MovieDetail::class)->name('movie.detail');
 Route::get('/watch/{id}', Player::class)->name('movie.watch');
+Route::get('/vip', \App\Livewire\User\Subscription::class)->name('subscription');
+Route::get('/profiles', \App\Livewire\Auth\ProfileSelection::class)->name('profiles')->middleware('auth');
+Route::get('/trending', \App\Livewire\Trending::class)->name('trending');
+Route::get('/new-releases', \App\Livewire\NewReleases::class)->name('new.releases');
 Route::get('/category/{slug}', \App\Livewire\CategoryDetail::class)->name('category.detail');
 
 Route::get('/about', function() { return view('pages.about'); })->name('about');
 Route::get('/contact', function() { return view('pages.contact'); })->name('contact');
+Route::get('/help', function() { return view('pages.help'); })->name('help');
+Route::get('/faq', function() { return view('pages.faq'); })->name('faq');
+Route::get('/report-link', function() { return view('pages.report'); })->name('report.link');
+Route::get('/app', function() { return view('pages.download'); })->name('app.download');
+Route::get('/privacy', function() { return view('pages.privacy'); })->name('privacy');
+Route::get('/terms', function() { return view('pages.terms'); })->name('terms');
+
+Route::post('/payments/webhook', [App\Http\Controllers\PaymentController::class, 'webhook']);
 
 // Subtitle CORS Proxy
 Route::get('/subtitle-cors/{id}', function($id) {
@@ -75,6 +118,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::get('/profile', \App\Livewire\User\Profile::class)->name('user.profile');
+    Route::get('/request-film', \App\Livewire\RequestFilm::class)->name('request.film');
 
     // Fitur Kelola Film Khusus User
     Route::get('/dashboard/films', \App\Livewire\User\Films\Index::class)->name('user.films.index');
@@ -102,7 +146,8 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->group(function () {
     
     Route::get('/genres', \App\Livewire\Admin\Genres\Index::class)->name('admin.genres.index');
     Route::get('/users', \App\Livewire\Admin\Users\Index::class)->name('admin.users.index');
-    Route::get('/reports', \App\Livewire\Admin\Reports\Index::class)->name('admin.reports.index');
+    Route::get('/reports', \App\Livewire\Admin\Reports\ListReports::class)->name('admin.reports.index');
+    Route::get('/requests', \App\Livewire\Admin\Requests\ListRequests::class)->name('admin.requests.index');
     Route::get('/reviews', \App\Livewire\Admin\Reviews\Index::class)->name('admin.reviews.index');
     Route::get('/settings', \App\Livewire\Admin\Settings\SiteSettings::class)->name('admin.settings');
 });

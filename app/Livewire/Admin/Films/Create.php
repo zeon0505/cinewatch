@@ -8,6 +8,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 
 class Create extends Component
@@ -21,6 +22,7 @@ class Create extends Component
     public $audience_type = 'adult'; // NEW: adult/kids
     public $rating_value = 0.0; // NEW: manual rating
     public $age_rating = 'PG-13'; // NEW: extra metadata
+    public $is_premium = false; // NEW: VIP logic
     public $posterFile; // For local file upload
     
     public $apiSource = 'tmdb'; // New property for source selection
@@ -306,6 +308,7 @@ class Create extends Component
             'audience_type' => $this->audience_type,
             'rating_value' => $this->rating_value,
             'age_rating' => $this->age_rating,
+            'is_premium' => $this->is_premium,
             'status' => 'published',
             'category_id' => $this->selectedCategories[0] ?? null, // Fallback for legacy
         ]);

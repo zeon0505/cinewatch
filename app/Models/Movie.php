@@ -25,7 +25,8 @@ class Movie extends Model
         'views',
         'tmdb_id',
         'year',
-        'status'
+        'status',
+        'is_premium'
     ];
 
     public function user()
@@ -56,5 +57,10 @@ class Movie extends Model
     public function ratings()
     {
         return $this->hasMany(Rating::class);
+    }
+
+    public function scopeKids($query)
+    {
+        return $query->where('audience_type', 'kids')->orWhereNull('audience_type');
     }
 }

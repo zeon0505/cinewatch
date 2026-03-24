@@ -4,6 +4,7 @@ namespace App\Livewire\Auth;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 
 class Login extends Component
 {
@@ -22,18 +23,20 @@ class Login extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             session()->regenerate();
             
-            if (auth()->user()->role === 'admin') {
+            $user = Auth::user();
+            if ($user->role === 'admin') {
                 return redirect()->intended('/admin');
             }
             
-            return redirect()->intended('/');
+            return redirect()->route('profiles');
         }
 
         $this->addError('email', 'Email atau password salah.');
     }
 
+    #[Layout('components.layouts.app')]
     public function render()
     {
-        return view('livewire.auth.login')->layout('layouts.app');
+        return view('livewire.auth.login');
     }
 }

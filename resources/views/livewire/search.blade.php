@@ -7,7 +7,7 @@
         class="bg-white/10 border border-white/15 rounded-md px-4 py-2 text-sm text-white focus:ring-2 focus:ring-red-600 outline-none w-[220px] transition-all focus:w-[280px]"
     />
     
-    @if(strlen($query) > 1)
+    @if(strlen($query) >= 3)
     <div class="absolute top-full right-0 mt-2 w-72 bg-[#1C1C1C] rounded-md shadow-2xl border border-white/5 overflow-hidden z-[60]">
         @if(count($results) > 0)
             @foreach($results as $movie)

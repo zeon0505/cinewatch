@@ -12,7 +12,7 @@ class Search extends Component
 
     public function updatedQuery()
     {
-        if (strlen($this->query) > 1) {
+        if (strlen($this->query) >= 3) {
             $this->results = Movie::where('title', 'like', '%' . $this->query . '%')
                 ->take(5)
                 ->get();

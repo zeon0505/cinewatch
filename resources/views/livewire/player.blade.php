@@ -39,6 +39,17 @@
                                 }
                                 
                                 const player = new Plyr(video, defaultOptions);
+
+                                // Resume & Save Progress
+                                player.on('ready', () => { if(@json($progress) > 0) player.currentTime = @json($progress); });
+                                player.on('timeupdate', () => {
+                                    let now = Math.floor(player.currentTime);
+                                    if (now > 0 && now % 10 === 0 && now !== (window.lastProgress || 0)) {
+                                        window.lastProgress = now;
+                                        $wire.call('update_progress', now);
+                                    }
+                                });
+
                                 player.on('error', (event) => {
                                     console.error('Plyr Error:', event);
                                     alert('Gagal memutar video dari sumber ini. Pastikan link video valid dan mendukung akses langsung (bukan embed).');
@@ -138,6 +149,17 @@
                     Server Lokal (CC)
                 </button>
             </div>
+
+            <div class="flex items-center gap-2 border-l border-white/10 pl-6 h-10">
+                <button 
+                    wire:click="reportLink('link_mati')"
+                    wire:loading.attr="disabled"
+                    class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-red-500 transition-colors group"
+                >
+                    <span class="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform">report</span>
+                    Lapor Link Mati
+                </button>
+            </div>
         </div>
     </div>
 
@@ -186,6 +208,40 @@
             </div>
         </div>
     </section>
+    <!-- Related Movies Section -->
+    @if(count($relatedMovies) > 0)
+    <section class="animate-fadeIn delay-3 pt-10">
+        <div class="px-4 mb-6 flex items-center justify-between">
+            <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Saran Film Terkait</h2>
+            <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
+        </div>
+        
+        <div class="relative group/row">
+            <button onclick="scrollRow('related-row', -800)" class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 rounded-full flex items-center justify-center z-30 opacity-0 group-hover/row:opacity-100 transition-opacity border border-white/10 backdrop-blur-md">
+                <span class="material-symbols-outlined text-white">chevron_left</span>
+            </button>
+            
+            <div id="related-row" class="flex gap-4 overflow-x-auto pb-6 scroll-smooth scrollbar-hide">
+                @foreach($relatedMovies as $related)
+                <div onclick="window.location.href='{{ route('movie.detail', $related->slug) }}'" class="flex-none w-[160px] md:w-[200px] group/card cursor-pointer">
+                    <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+                        <img src="{{ $related->thumbnail }}" alt="{{ $related->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+                        </div>
+                    </div>
+                    <h3 class="text-white font-bold text-[11px] uppercase tracking-tight line-clamp-1 group-hover/card:text-red-500 transition-colors">{{ $related->title }}</h3>
+                    <p class="text-[9px] text-gray-500 font-black uppercase tracking-widest">{{ $related->year ?? '2024' }}</p>
+                </div>
+                @endforeach
+            </div>
+
+            <button onclick="scrollRow('related-row', 800)" class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 rounded-full flex items-center justify-center z-30 opacity-0 group-hover/row:opacity-100 transition-opacity border border-white/10 backdrop-blur-md">
+                <span class="material-symbols-outlined text-white">chevron_right</span>
+            </button>
+        </div>
+    </section>
+    @endif
 
     <style>
         .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }

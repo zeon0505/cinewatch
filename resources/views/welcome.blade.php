@@ -1,30 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CINEWATCH — Premium Streaming Experience</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<x-layouts.app>
+    @push('styles')
     <style>
-        :root {
-            --red: #E50914;
-            --red-glow: rgba(229, 9, 20, 0.5);
-            --bg: #050505;
-            --card: #101010;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: #E5E5E5; font-family: 'Outfit', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
-
-        .logo { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.8rem; }
-        .nav-glass { backdrop-filter: blur(20px); background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); transition: all 0.4s; }
-        .nav-scrolled { background: rgba(0,0,0,0.98); border-bottom: 1px solid rgba(255,255,255,0.05); }
-
         .hero-section { position: relative; height: 90vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
         .hero-video-bg { position: absolute; inset: 0; z-index: 0; }
         .hero-video-bg img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4) contrast(1.1); animation: heroZoom 30s linear infinite alternate; }
@@ -43,7 +19,7 @@
         .row-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 20px 0; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
         .row-scroll::-webkit-scrollbar { display: none; }
 
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; items-center: center; justify-content: center; cursor: pointer; z-index: 60; opacity: 0; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 60; opacity: 0; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
         .row-container:hover .nav-btn { opacity: 1; }
         .nav-btn:hover { background: var(--red); transform: translateY(-50%) scale(1.1); }
         .nav-btn.prev { left: 5px; }
@@ -53,227 +29,199 @@
         .genre-pill:hover { background: var(--red); transform: translateY(-5px); }
         .genre-pill h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1.5px; }
 
-        .btn-primary { background: var(--red); color: white; padding: 12px 28px; border-radius: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 12px; transition: all 0.3s; display: inline-flex; items-center: center; gap: 8px; }
-        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-primary-home { background: var(--red); color: white; padding: 12px 28px; border-radius: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 12px; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary-home:hover { transform: translateY(-2px); filter: brightness(1.1); }
         
         .fade-in-up { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
         .fade-in-up.visible { opacity: 1; transform: translateY(0); }
 
-        .tag { font-size: 9px; font-weight: 900; background: var(--red); padding: 3px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; display: inline-block; }
-        .material-symbols-outlined { font-size: 20px; }
+        .tag-small { font-size: 9px; font-weight: 900; background: var(--red); padding: 3px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; display: inline-block; }
     </style>
-    @livewireStyles
-</head>
-<body>
+    @endpush
 
-<nav id="mainNav" class="nav-glass fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-10 py-5">
-    <div class="flex items-center gap-8">
-        <a href="/" class="logo text-3xl text-[#E50914] hover:scale-105 transition-transform">CINEWATCH</a>
-        <ul class="hidden md:flex gap-6 text-sm text-gray-300">
-            <li><a href="/" class="hover:text-white transition-colors">Beranda</a></li>
-            <li><a href="/#trending" class="hover:text-white transition-colors">Trending</a></li>
-            <li><a href="/#genre" class="hover:text-white transition-colors">Genre</a></li>
-            <li><a href="/#terbaru" class="hover:text-white transition-colors">Terbaru</a></li>
-        </ul>
-    </div>
-    <div class="flex items-center gap-6">
-        @livewire('search')
-        @guest
-            <div class="flex items-center gap-5">
-                <a href="/login" class="text-[10px] font-black uppercase text-gray-400 hover:text-white transition-all tracking-[1.5px]">Login</a>
-                <a href="/register" class="btn-primary py-2 px-6 text-[10px]">Join Now</a>
+    <section class="hero-section" x-data="{ activeSlide: 0, slides: {{ count($heroMovies) ?: 1 }}, autoPlayInterval: null }" x-init="autoPlayInterval = setInterval(() => activeSlide = (activeSlide + 1) % slides, 6000)">
+        @forelse($heroMovies as $index => $heroMovie)
+        <div x-show="activeSlide === {{ $index }}"
+             x-transition:enter="transition ease-out duration-1000"
+             x-transition:enter-start="opacity-0 scale-105"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-1000 absolute inset-0"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="absolute inset-0 w-full h-full">
+            
+            <div class="hero-video-bg">
+                <img src="{{ $heroMovie->thumbnail ?? 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1800&q=80' }}" alt="hero-bg" class="w-full h-full object-cover" />
             </div>
-        @else
-            <div class="flex items-center gap-6">
-                <div class="hidden lg:flex flex-col items-end">
-                    <span class="text-[9px] text-gray-600 font-bold uppercase tracking-[2px]">Member Area</span>
+            <div class="hero-overlay"></div>
+            
+            <div class="absolute inset-0 z-10 flex flex-col justify-center px-10 md:px-20 max-w-4xl">
+                <div class="animate-fadeIn scale-entrance">
+                    <span class="tag-small">Featured Billboard</span>
+                    <h1 class="text-6xl md:text-8xl font-black leading-[0.85] mb-6 tracking-tighter uppercase" style="font-family:'Bebas Neue',sans-serif">
+                        {{ $heroMovie->title }}
+                    </h1>
+                    <p class="text-gray-300 text-sm md:text-base max-w-xl leading-relaxed mb-8 opacity-70 font-light italic drop-shadow-lg">
+                        "{{ $heroMovie->description }}"
+                    </p>
                     <div class="flex gap-4">
-                        <a href="{{ auth()->user()->role === 'admin' ? '/admin' : '/dashboard' }}" class="text-[10px] font-black uppercase text-white tracking-[2px] hover:text-[#E50914] transition-all flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">dashboard</span> Dashboard
+                        <a href="{{ route('movie.detail', $heroMovie->slug) }}" class="btn-primary-home">
+                            <span class="material-symbols-outlined">play_arrow</span> Play Now
                         </a>
-                        <a href="{{ route('user.profile') }}" class="text-[10px] font-black uppercase text-white tracking-[2px] hover:text-[#E50914] transition-all flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[16px]">account_circle</span> Profile
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="w-10 h-10 bg-[#E50914] rounded-full flex items-center justify-center font-black text-white text-sm shadow-[0_0_20px_rgba(229,9,20,0.4)] border border-white/10 group cursor-pointer relative">
-                    {{ substr(auth()->user()->name, 0, 1) }}
-                    
-                    <!-- Hover Dropdown for Mobile/Clean look -->
-                    <div class="absolute top-full right-0 mt-4 w-48 bg-neutral-900 border border-white/10 rounded-xl overflow-hidden shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all translate-y-2 group-hover:translate-y-0 z-[200]">
-                         <div class="p-4 border-b border-white/5">
-                             <p class="text-[10px] text-white font-black uppercase truncate">{{ auth()->user()->name }}</p>
-                             <p class="text-[8px] text-gray-600 font-bold uppercase">{{ auth()->user()->role }} Account</p>
-                         </div>
-                         <a href="{{ route('user.profile') }}" class="flex items-center gap-3 p-4 text-[10px] font-black uppercase text-gray-400 hover:bg-white/5 hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-[18px]">settings</span> Account Settings
-                         </a>
-                         <form action="/logout" method="POST" class="w-full">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center gap-3 p-4 text-[10px] font-black uppercase text-red-500 hover:bg-red-500/10 transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">logout</span> Sign Out
-                            </button>
-                         </form>
+                        @auth
+                        <button class="bg-white/10 backdrop-blur-xl border border-white/10 text-white px-8 py-3 rounded-lg font-black uppercase text-[11px] flex items-center gap-2 hover:bg-white/20 transition-all">
+                            <span class="material-symbols-outlined">analytics</span> Detail
+                        </button>
+                        @endauth
                     </div>
                 </div>
             </div>
-        @endguest
-    </div>
-</nav>
+        </div>
+        @empty
+        <div class="absolute inset-0 w-full h-full bg-zinc-900 flex items-center justify-center">
+            <p class="text-gray-500 font-black uppercase tracking-widest">No Content Featured</p>
+        </div>
+        @endforelse
 
-<section class="hero-section" x-data="{ activeSlide: 0, slides: {{ count($heroMovies) }}, autoPlayInterval: null }" x-init="autoPlayInterval = setInterval(() => activeSlide = (activeSlide + 1) % slides, 6000)">
-    @foreach($heroMovies as $index => $heroMovie)
-    <div x-show="activeSlide === {{ $index }}"
-         x-transition:enter="transition ease-out duration-1000"
-         x-transition:enter-start="opacity-0 scale-105"
-         x-transition:enter-end="opacity-100 scale-100"
-         x-transition:leave="transition ease-in duration-1000 absolute inset-0"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         class="absolute inset-0 w-full h-full">
-        
-        <div class="hero-video-bg">
-            <img src="{{ $heroMovie->thumbnail ?? 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1800&q=80' }}" alt="hero-bg" class="w-full h-full object-cover" />
-        </div>
-        <div class="hero-overlay"></div>
-        
-        <div class="absolute inset-0 z-10 flex flex-col justify-center px-10 md:px-20 max-w-4xl">
-            <div class="animate-fadeIn scale-entrance">
-                <span class="tag">Exclusive Billboard</span>
-                <h1 class="text-6xl md:text-8xl font-black leading-[0.85] mb-6 tracking-tighter uppercase" style="font-family:'Bebas Neue',sans-serif">
-                    {{ $heroMovie->title }}
-                </h1>
-                <p class="text-gray-300 text-sm md:text-base max-w-xl leading-relaxed mb-8 opacity-70 font-light italic drop-shadow-lg">
-                    "{{ $heroMovie->description }}"
-                </p>
-                <div class="flex gap-4">
-                    <a href="{{ route('movie.detail', $heroMovie->slug) }}" class="btn-primary">
-                        <span class="material-symbols-outlined">play_arrow</span> Play Now
-                    </a>
-                    @auth
-                    <button class="bg-white/10 backdrop-blur-xl border border-white/10 text-white px-8 py-3 rounded-lg font-black uppercase text-[11px] flex items-center gap-2 hover:bg-white/20 transition-all">
-                        <span class="material-symbols-outlined">add</span> My List
-                    </button>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </div>
-    @endforeach
-
-    <!-- Pagination Dots -->
-    <div class="absolute bottom-24 left-10 md:left-20 z-20 flex gap-3">
-        @foreach($heroMovies as $index => $heroMovie)
-        <button @click="activeSlide = {{ $index }}; clearInterval(autoPlayInterval); autoPlayInterval = setInterval(() => activeSlide = (activeSlide + 1) % slides, 6000)"
-                :class="{'w-8 bg-[#E50914]': activeSlide === {{ $index }}, 'w-2 bg-white/50 hover:bg-white': activeSlide !== {{ $index }}}"
-                class="h-2 rounded-full transition-all duration-300 shadow-lg" aria-label="Go to slide {{ $index + 1 }}"></button>
-        @endforeach
-    </div>
-</section>
-
-<div class="relative z-20 space-y-6 pb-20 -mt-16">
-    
-    <section id="trending" class="row-container fade-in-up">
-        <div class="px-4 mb-2">
-            <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Trending Now</h2>
-        </div>
-        <div class="row-container">
-            <button onclick="scrollRow('trending-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
-            <div id="trending-row" class="row-scroll">
-                @foreach($trendingMovies as $movie)
-                <div onclick="window.location.href='{{ route('movie.detail', $movie->slug) }}'" class="film-card group">
-                    <img src="{{ $movie->thumbnail }}" alt="{{ $movie->title }}" />
-                    <div class="card-info">
-                        <span class="tag !bg-white !text-black mb-1.5">{{ $movie->category->name }}</span>
-                        <h3 class="text-white font-black text-[11px] uppercase tracking-tight mb-1">{{ $movie->title }}</h3>
-                        <p class="text-[9px] text-[#E50914] font-black uppercase tracking-widest">{{ $movie->duration }}</p>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            <button onclick="scrollRow('trending-row', 800)" class="nav-btn next"><span class="material-symbols-outlined">chevron_right</span></button>
-        </div>
-    </section>
-
-    <section id="genre" class="px-10 md:px-20 py-12 fade-in-up">
-        <div class="flex flex-col items-center mb-10 text-center">
-            <h2 class="text-4xl font-black text-white uppercase tracking-tight" style="font-family:'Bebas Neue',sans-serif">Browse Categories</h2>
-            <div class="w-16 h-1 bg-[#E50914] mt-2 rounded-full"></div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
-            @foreach($categories as $category)
-            <div onclick="window.location.href='{{ route('category.detail', $category->slug) }}'" class="genre-pill group">
-                <h3 class="relative z-10 text-white group-hover:scale-105 transition-transform group-hover:text-white">{{ $category->name }}</h3>
-                <p class="relative z-10 text-[8px] text-gray-500 group-hover:text-white/70 font-black uppercase tracking-[2px] mt-1">{{ $category->movies_count }} Movies</p>
-            </div>
+        @if(count($heroMovies) > 1)
+        <div class="absolute bottom-24 left-10 md:left-20 z-20 flex gap-3">
+            @foreach($heroMovies as $index => $heroMovie)
+            <button @click="activeSlide = {{ $index }}; clearInterval(autoPlayInterval); autoPlayInterval = setInterval(() => activeSlide = (activeSlide + 1) % slides, 6000)"
+                    :class="{'w-8 bg-red-600': activeSlide === {{ $index }}, 'w-2 bg-white/50 hover:bg-white': activeSlide !== {{ $index }}}"
+                    class="h-2 rounded-full transition-all duration-300 shadow-lg" aria-label="Go to slide {{ $index + 1 }}"></button>
             @endforeach
         </div>
+        @endif
     </section>
 
-    <section id="new" class="row-container fade-in-up">
-        <div class="px-4 mb-2">
-            <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Fresh Releases</h2>
-        </div>
-        <div class="row-container">
-            <button onclick="scrollRow('new-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
-            <div id="new-row" class="row-scroll">
-                @foreach($latestMovies as $movie)
-                <div onclick="window.location.href='{{ route('movie.detail', $movie->slug) }}'" class="film-card group">
-                    <img src="{{ $movie->thumbnail }}" alt="{{ $movie->title }}" />
-                    <div class="card-info">
-                        <h3 class="text-white font-black text-[11px] uppercase">{{ $movie->title }}</h3>
+    <div class="relative z-20 space-y-6 pb-20 -mt-16">
+        
+        @if(isset($continueWatching) && count($continueWatching) > 0)
+        <section id="continue-watching" class="row-container animate-fadeIn">
+            <div class="px-4 mb-2 flex items-center justify-between">
+                <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Lanjutkan Menonton</h2>
+                <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
+            </div>
+            <div class="row-container !p-0">
+                <button onclick="scrollRow('continue-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div id="continue-row" class="row-scroll px-10">
+                    @foreach($continueWatching as $history)
+                    <div onclick="window.location.href='{{ route('movie.detail', $history->movie->slug) }}'" class="film-card group !w-[220px]">
+                        <div class="relative aspect-[16/9] overflow-hidden">
+                            <img src="{{ $history->movie->thumbnail }}" alt="{{ $history->movie->title }}" class="w-full h-full object-cover" />
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h3 class="text-white font-black text-[10px] uppercase tracking-tight line-clamp-1">{{ $history->movie->title }}</h3>
+                            <div class="mt-2 h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-600 rounded-full" style="width: 45%"></div>
+                            </div>
+                        </div>
                     </div>
+                    @endforeach
+                </div>
+                <button onclick="scrollRow('continue-row', 800)" class="nav-btn next"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
+        @endif
+
+        <section id="trending" class="row-container fade-in-up">
+            <div class="px-4 mb-2 flex items-center justify-between">
+                <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Trending Now</h2>
+                <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
+            </div>
+            <div class="row-container !p-0">
+                <button onclick="scrollRow('trending-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div id="trending-row" class="row-scroll px-10">
+                    @forelse($trendingMovies as $movie)
+                    <div onclick="window.location.href='{{ route('movie.detail', $movie->slug) }}'" class="film-card group">
+                        <img src="{{ $movie->thumbnail }}" alt="{{ $movie->title }}" />
+                        <div class="card-info">
+                            @if($movie->is_premium)
+                                <div class="absolute top-2 right-2 bg-yellow-500 text-black text-[7px] font-black px-1.5 py-0.5 rounded flex items-center gap-0.5 shadow-lg z-20">
+                                    <span class="material-symbols-outlined text-[8px]">workspace_premium</span> VIP
+                                </div>
+                            @endif
+                            <span class="tag-small !bg-white !text-black mb-1.5">{{ $movie->category->name ?? 'Uncategorized' }}</span>
+                            <h3 class="text-white font-black text-[11px] uppercase tracking-tight mb-1">{{ $movie->title }}</h3>
+                            <p class="text-[9px] text-red-600 font-black uppercase tracking-widest">{{ $movie->duration }}</p>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-gray-600 text-xs py-10 uppercase font-black tracking-widest">Belum ada film trending</p>
+                    @endforelse
+                </div>
+                <button onclick="scrollRow('trending-row', 800)" class="nav-btn next"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
+
+        <section id="genre" class="px-10 md:px-20 py-12 fade-in-up">
+            <div class="flex flex-col items-center mb-10 text-center">
+                <h2 class="text-4xl font-black text-white uppercase tracking-tight" style="font-family:'Bebas Neue',sans-serif">Browse Categories</h2>
+                <div class="w-16 h-1 bg-red-600 mt-2 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-6 gap-6">
+                @foreach($categories as $category)
+                <div onclick="window.location.href='{{ route('category.detail', $category->slug) }}'" class="genre-pill group">
+                    <h3 class="relative z-10 text-white group-hover:scale-105 transition-transform">{{ $category->name }}</h3>
+                    <p class="relative z-10 text-[8px] text-gray-500 group-hover:text-white/70 font-black uppercase tracking-[2px] mt-1">{{ $category->movies_count }} Movies</p>
                 </div>
                 @endforeach
             </div>
-            <button onclick="scrollRow('new-row', 800)" class="nav-btn next"><span class="material-symbols-outlined">chevron_right</span></button>
-        </div>
-    </section>
+        </section>
 
-</div>
+        <section id="new" class="row-container fade-in-up">
+            <div class="px-4 mb-2 flex items-center justify-between">
+                <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Fresh Releases</h2>
+                <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
+            </div>
+            <div class="row-container !p-0">
+                <button onclick="scrollRow('new-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
+                <div id="new-row" class="row-scroll px-10">
+                    @forelse($latestMovies as $movie)
+                    <div onclick="window.location.href='{{ route('movie.detail', $movie->slug) }}'" class="film-card group">
+                        <img src="{{ $movie->thumbnail }}" alt="{{ $movie->title }}" />
+                        <div class="card-info text-center">
+                            @if($movie->is_premium)
+                                <div class="absolute top-2 right-2 bg-yellow-500 text-black text-[7px] font-black px-1.5 py-0.5 rounded flex items-center gap-0.5 shadow-lg z-20">
+                                    <span class="material-symbols-outlined text-[8px]">workspace_premium</span> VIP
+                                </div>
+                            @endif
+                            <h3 class="text-white font-black text-[11px] uppercase">{{ $movie->title }}</h3>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-gray-600 text-xs py-10 uppercase font-black tracking-widest">Belum ada rilis baru</p>
+                    @endforelse
+                </div>
+                <button onclick="scrollRow('new-row', 800)" class="nav-btn next"><span class="material-symbols-outlined">chevron_right</span></button>
+            </div>
+        </section>
 
-<footer class="bg-black py-16 px-10 md:px-20 border-t border-white/5 text-center">
-    <span class="logo text-[#E50914] mb-8 block">CINEWATCH</span>
-    <div class="flex flex-wrap justify-center gap-10 text-[9px] font-black uppercase text-gray-600 mb-10 tracking-[3px]">
-        <a href="#" class="hover:text-white transition-all">Privacy</a>
-        <a href="#" class="hover:text-white transition-all">Terms</a>
-        <a href="#" class="hover:text-white transition-all">Support</a>
     </div>
-    <p class="text-[8px] text-gray-800 font-black uppercase tracking-[4px]">
-        © 2026 CINEWATCH GLOBAL INC.
-    </p>
-</footer>
 
-@livewireScripts
-<script>
-    const nav = document.getElementById('mainNav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            nav.classList.add('nav-scrolled');
-            nav.classList.remove('py-5');
-            nav.classList.add('py-3');
-        } else {
-            nav.classList.remove('nav-scrolled');
-            nav.classList.add('py-5');
-            nav.classList.remove('py-3');
-        }
-    });
-
-    function scrollRow(id, amount) {
-        document.getElementById(id).scrollBy({ left: amount, behavior: 'smooth' });
-    }
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
+    <script {!! 'data-navigate-once' !!}>
+        function initWelcome() {
+            window.scrollRow = function(id, amount) {
+                const el = document.getElementById(id);
+                if(el) el.scrollBy({ left: amount, behavior: 'smooth' });
             }
-        });
-    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+        }
+
+        document.addEventListener('livewire:navigated', initWelcome);
+        document.addEventListener('DOMContentLoaded', initWelcome);
+    </script>
+</x-layouts.app>

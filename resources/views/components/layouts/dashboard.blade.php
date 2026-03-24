@@ -77,6 +77,14 @@
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">star</span>
                     <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Rating</span>
                 </a>
+                <a href="{{ route('admin.reports.index') }}" class="nav-item rounded-xl {{ request()->is('admin/reports*') ? 'active' : '' }}" title="Laporan Masalah">
+                    <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">report</span>
+                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Laporan</span>
+                </a>
+                <a href="{{ route('admin.requests.index') }}" class="nav-item rounded-xl {{ request()->is('admin/requests*') ? 'active' : '' }}" title="Request Film">
+                    <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">playlist_add</span>
+                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Request</span>
+                </a>
                 <a href="{{ route('admin.settings') }}" class="nav-item rounded-xl {{ request()->is('admin/settings*') ? 'active' : '' }}" title="Site Settings">
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">settings_suggest</span>
                     <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Settings</span>

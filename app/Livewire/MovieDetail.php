@@ -45,6 +45,11 @@ class MovieDetail extends Component
 
     public function render()
     {
-        return view('livewire.movie-detail')->layout('components.layouts.app');
+        $relatedMovies = Movie::where('category_id', $this->movie->category_id)
+            ->where('id', '!=', $this->movie->id)
+            ->take(12)
+            ->get();
+
+        return view('livewire.movie-detail', compact('relatedMovies'))->layout('components.layouts.app');
     }
 }
