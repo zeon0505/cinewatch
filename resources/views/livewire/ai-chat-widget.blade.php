@@ -80,7 +80,7 @@
                     <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-red-900 rounded-full"></span>
                 </div>
                 <div>
-                    <h3 class="text-white font-black text-sm uppercase tracking-widest leading-tight">Yoyo.AI</h3>
+                    <h3 class="text-white font-black text-sm uppercase tracking-widest leading-tight">Zeon AI</h3>
                     <p class="text-[10px] text-white/70 font-bold uppercase tracking-widest mt-0.5">Cinewatch Support</p>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                     x-model="newMessage"
                     @keydown.enter.prevent="sendMessage()"
                     :disabled="isTyping"
-                    placeholder="Tanya Yoyo seputar film..."
+                    placeholder="Tanya Zeon seputar film..."
                     class="w-full bg-black/50 border border-white/10 text-white text-xs rounded-xl px-4 py-3 pb-3 pr-12 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all font-medium placeholder-gray-600 disabled:opacity-50"
                 >
                 <button

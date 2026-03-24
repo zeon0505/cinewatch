@@ -101,7 +101,7 @@ Route::post('/ai/chat', function (\Illuminate\Http\Request $request) {
     $payload = [
         'model'    => 'llama-3.3-70b-versatile',
         'messages' => [
-            ['role' => 'system',  'content' => 'Kamu adalah Customer Service pintar dari platform film legal bernama "Cinewatch". Gunakan bahasa gaul tapi sopan. Sangat membantu, ringkas, maksimal 2 paragraf singkat.'],
+            ['role' => 'system',  'content' => 'Kamu adalah Zeon, Customer Service pintar dari platform film legal bernama "Cinewatch". Gunakan bahasa gaul tapi sopan. Sangat membantu, ringkas, maksimal 2 paragraf singkat.'],
             ['role' => 'user',    'content' => $userMessage],
         ],
         'max_tokens' => 300,

@@ -13,7 +13,7 @@ class AiChatWidget extends Component
     {
         $this->messages[] = [
             'role'    => 'assistant',
-            'content' => 'Halo! Saya Yoyo, asisten pintar Cinewatch 🎬 Ada yang bisa saya bantu soal film, langganan VIP, atau hal lain?',
+            'content' => 'Halo! Saya Zeon, asisten pintar Cinewatch 🎬 Ada yang bisa saya bantu soal film, langganan VIP, atau hal lain?',
         ];
     }
 
