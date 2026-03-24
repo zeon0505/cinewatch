@@ -12,6 +12,8 @@ use App\Models\Category;
 use App\Models\History;
 use Illuminate\Support\Facades\Artisan;
 use App\Livewire\User\Subscription;
+use App\Livewire\User\Profile;
+use App\Livewire\User\Watchlist;
 
 Route::get('/', function () {
     $isKids = session('is_kids_mode', false);
@@ -168,8 +170,8 @@ Route::middleware(['auth'])->group(function () {
         return view('user.dashboard');
     })->name('dashboard');
 
-    Route::get('/profile', \App\Livewire\User\Profile::class)->name('user.profile');
-    Route::get('/watchlist', \App\Livewire\User\Watchlist::class)->name('user.watchlist');
+    Route::get('/profile', Profile::class)->name('user.profile');
+    Route::get('/watchlist', Watchlist::class)->name('user.watchlist');
     Route::get('/request-film', \App\Livewire\RequestFilm::class)->name('request.film');
 
     // Fitur Kelola Film Khusus User
