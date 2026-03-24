@@ -11,6 +11,12 @@
         </div>
     @endif
 
+    @if (session()->has('success'))
+        <div class="mb-12 p-5 bg-green-600/10 border border-green-600/20 text-green-500 rounded-2xl text-center font-black uppercase text-[10px] tracking-widest animate-bounce shadow-2xl shadow-green-900/20">
+            <span class="material-symbols-outlined text-[16px] align-middle mr-2">check_circle</span> {{ session('success') }}
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <!-- Free Plan -->
         <div class="bg-zinc-900/20 backdrop-blur-3xl border border-white/5 p-12 rounded-[40px] flex flex-col items-center text-center opacity-40 grayscale group hover:opacity-100 hover:grayscale-0 transition-all duration-500">
@@ -53,14 +59,21 @@
                     <p class="mt-6 text-[9px] text-gray-500 font-black uppercase tracking-[3px] opacity-60">BERLAKU HINGGA: {{ auth()->user()->vip_until ? auth()->user()->vip_until->format('d M Y') : '-' }}</p>
                 @else
                     <button wire:click="checkout(49000)" wire:loading.attr="disabled" class="w-full py-6 bg-gradient-to-r from-yellow-500 via-orange-500 to-yellow-600 text-black rounded-[28px] font-black uppercase tracking-[4px] text-[10px] hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(234,179,8,0.3)] hover:shadow-[0_25px_50px_rgba(234,179,8,0.4)] disabled:opacity-50 group/btn relative overflow-hidden">
-                        <span wire:loading.remove class="relative z-10 flex items-center justify-center gap-3">
+                        <span wire:loading.remove class="relative z-10 flex items-center justify-center gap-3" wire:target="checkout">
                             AKTIFKAN VIP SEKARANG <span class="material-symbols-outlined text-sm">rocket_launch</span>
                         </span>
-                        <span wire:loading class="relative z-10">MENGHUBUNGI SATELIT...</span>
+                        <span wire:loading class="relative z-10" wire:target="checkout">MENGHUBUNGI SATELIT...</span>
                         <!-- Gloss effect -->
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
                     </button>
-                    <p class="mt-6 text-[9px] text-gray-600 font-bold uppercase tracking-[4px] opacity-50 flex items-center gap-2">
+
+                    <button wire:click="checkStatus" wire:loading.attr="disabled" class="mt-4 w-full py-3 border border-yellow-500/30 text-yellow-500 rounded-[20px] font-black uppercase tracking-[3px] text-[9px] hover:bg-yellow-500/10 transition-all flex items-center justify-center gap-2 group/check">
+                        <span class="material-symbols-outlined text-sm group-hover/check:rotate-180 transition-transform duration-500">refresh</span>
+                        <span wire:loading.remove wire:target="checkStatus">Sudah Bayar? Cek Status</span>
+                        <span wire:loading wire:target="checkStatus">MENGECEK...</span>
+                    </button>
+
+                    <p class="mt-6 text-[9px] text-gray-600 font-bold uppercase tracking-[4px] opacity-50 flex items-center justify-center gap-2">
                          <span class="material-symbols-outlined text-[14px]">shield_check</span> Secure payment by <span class="text-white">MIDTRANS</span>
                     </p>
                 @endif
