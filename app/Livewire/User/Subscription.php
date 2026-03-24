@@ -39,9 +39,9 @@ class Subscription extends Component
                 'email' => $user->email,
             ],
             'callbacks' => [
-                'finish' => 'https://cinewatch.fpyoga.my.id/dashboard',
-                'error' => 'https://cinewatch.fpyoga.my.id/subscription',
-                'pending' => 'https://cinewatch.fpyoga.my.id/dashboard',
+                'finish' => route('dashboard'),
+                'error' => route('subscription'),
+                'pending' => route('dashboard'),
             ]
         ];
 

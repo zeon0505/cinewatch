@@ -65,9 +65,14 @@ class PaymentController extends Controller
         
         $user = User::find($transaction->user_id);
         if ($user) {
+            // Append to existing VIP time if they are still active
+            $currentVipUntil = ($user->vip_until && $user->vip_until->isFuture()) 
+                ? $user->vip_until 
+                : now();
+
             $user->update([
                 'is_vip' => true,
-                'vip_until' => now()->addDays(30)
+                'vip_until' => $currentVipUntil->addDays(30)
             ]);
         }
     }
