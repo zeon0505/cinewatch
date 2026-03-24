@@ -12,8 +12,14 @@ class Watchlist extends Component
     #[Layout('components.layouts.app')]
     public function render()
     {
+        $isKids = session('is_kids_mode', false);
         $watchlists = Auth::user()->watchlists()
-            ->with('movie.category')
+            ->with(['movie' => function($q) use ($isKids) {
+                $q->with('category')->when($isKids, fn($query) => $query->kids());
+            }])
+            ->whereHas('movie', function($q) use ($isKids) {
+                $q->when($isKids, fn($query) => $query->kids());
+            })
             ->latest()
             ->paginate(12);
 

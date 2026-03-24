@@ -61,6 +61,8 @@ class Movie extends Model
 
     public function scopeKids($query)
     {
-        return $query->where('audience_type', 'kids')->orWhereNull('audience_type');
+        return $query->where(function($q) {
+            $q->where('audience_type', 'kids');
+        });
     }
 }

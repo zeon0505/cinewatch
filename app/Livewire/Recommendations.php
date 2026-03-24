@@ -34,7 +34,11 @@ class Recommendations extends Component
 
         if ($history->isEmpty()) {
             // Suggeest trending if no history
-            $this->recommendations = Movie::orderBy('views', 'desc')->take(6)->get();
+            $isKids = session('is_kids_mode', false);
+            $this->recommendations = Movie::when($isKids, fn($q) => $q->kids())
+                ->orderBy('views', 'desc')
+                ->take(6)
+                ->get();
             $this->loading = false;
             return;
         }
@@ -52,11 +56,15 @@ class Recommendations extends Component
                 $suggestedTitles = $this->parseTitles($response);
                 
                 if (!empty($suggestedTitles)) {
+                    $isKids = session('is_kids_mode', false);
                     $this->recommendations = Movie::where(function($q) use ($suggestedTitles) {
                         foreach ($suggestedTitles as $title) {
                             $q->orWhere('title', 'like', '%' . $title . '%');
                         }
-                    })->take(6)->get();
+                    })
+                    ->when($isKids, fn($q) => $q->kids())
+                    ->take(6)
+                    ->get();
                 }
             }
         } catch (\Exception $e) {
@@ -65,7 +73,11 @@ class Recommendations extends Component
 
         // Fallback to latest movies if AI failed or returned no matches
         if (empty($this->recommendations)) {
-            $this->recommendations = Movie::latest()->take(6)->get();
+            $isKids = session('is_kids_mode', false);
+            $this->recommendations = Movie::when($isKids, fn($q) => $q->kids())
+                ->latest()
+                ->take(6)
+                ->get();
         }
 
         $this->loading = false;

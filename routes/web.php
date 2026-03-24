@@ -39,7 +39,9 @@ Route::get('/', function () {
             ->get();
     }
         
-    $categories = Category::withCount(['movies' => function($q) use ($isKids) {
+    $categories = Category::when($isKids, function($q) {
+        $q->whereHas('movies', fn($query) => $query->kids());
+    })->withCount(['movies' => function($q) use ($isKids) {
         $q->when($isKids, fn($query) => $query->kids());
     }])->get();
     

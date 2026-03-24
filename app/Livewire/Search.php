@@ -13,7 +13,9 @@ class Search extends Component
     public function updatedQuery()
     {
         if (strlen($this->query) >= 3) {
+            $isKids = session('is_kids_mode', false);
             $this->results = Movie::where('title', 'like', '%' . $this->query . '%')
+                ->when($isKids, fn($q) => $q->kids())
                 ->take(5)
                 ->get();
         } else {

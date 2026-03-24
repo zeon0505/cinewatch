@@ -14,7 +14,10 @@ class MovieDetail extends Component
 
     public function mount($slug)
     {
-        $this->movie = Movie::where('slug', $slug)->firstOrFail();
+        $isKids = session('is_kids_mode', false);
+        $this->movie = Movie::where('slug', $slug)
+            ->when($isKids, fn($q) => $q->kids())
+            ->firstOrFail();
         
         if (Auth::check()) {
             $this->isInWatchlist = Watchlist::where('user_id', Auth::id())
@@ -45,8 +48,10 @@ class MovieDetail extends Component
 
     public function render()
     {
+        $isKids = session('is_kids_mode', false);
         $relatedMovies = Movie::where('category_id', $this->movie->category_id)
             ->where('id', '!=', $this->movie->id)
+            ->when($isKids, fn($q) => $q->kids())
             ->take(12)
             ->get();
 
