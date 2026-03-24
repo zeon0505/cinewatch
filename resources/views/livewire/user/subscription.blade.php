@@ -54,29 +54,24 @@
     </div>
 
     @push('scripts')
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
     <script>
         document.addEventListener('livewire:initialized', () => {
             @this.on('show-payment', (event) => {
-                const token = event.token;
+                const token = event.token || (Array.isArray(event) ? event[0].token : null);
+                if (!token) return;
+                
                 window.snap.pay(token, {
                     onSuccess: function(result) {
-                        /* You may add your own implementation here */
-                        alert("Pembayaran berhasil!"); 
-                        window.location.href = '/dashboard';
+                        window.location.href = 'https://cinewatch.fpyoga.my.id/dashboard';
                     },
                     onPending: function(result) {
-                        /* You may add your own implementation here */
-                        alert("Menunggu pembayaran!"); 
-                        window.location.reload();
+                        window.location.href = 'https://cinewatch.fpyoga.my.id/dashboard';
                     },
                     onError: function(result) {
-                        /* You may add your own implementation here */
-                        alert("Pembayaran gagal!");
-                        window.location.reload();
+                        window.location.href = 'https://cinewatch.fpyoga.my.id/subscription';
                     },
                     onClose: function() {
-                        /* You may add your own implementation here */
                         alert('Anda menutup popup tanpa menyelesaikan pembayaran');
                     }
                 });

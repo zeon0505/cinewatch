@@ -39,4 +39,11 @@ return [
         'key' => env('GROQ_API_KEY'),
     ],
 
+    'midtrans' => [
+        'client_key' => env('MIDTRANS_CLIENT_KEY'),
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+        'redirect_url' => 'https://cinewatch.fpyoga.my.id/',
+    ],
+
 ];
