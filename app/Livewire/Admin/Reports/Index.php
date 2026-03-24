@@ -7,6 +7,7 @@ use App\Models\Movie;
 use App\Models\User;
 use App\Models\History;
 use App\Models\Watchlist;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
 class Index extends Component
@@ -18,6 +19,8 @@ class Index extends Component
         $totalMovies = Movie::count();
         $totalViews = Movie::sum('views');
         $totalWatchlist = Watchlist::count();
+        $totalRevenue = Transaction::whereIn('status', ['paid', 'settlement', 'capture'])->sum('amount');
+        
         
         // Film Teratas
         $topMovies = Movie::with('category')->orderBy('views', 'desc')->take(5)->get();
@@ -30,11 +33,18 @@ class Index extends Component
             ->get();
             
         $dailyViews = [];
+        $dailyRevenue = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i)->format('Y-m-d');
             $dayName = now()->subDays($i)->isoFormat('ddd');
-            $found = $dailyViewsRaw->firstWhere('date', $date);
-            $dailyViews[$dayName] = $found ? $found->count : 0;
+            
+            $foundViews = $dailyViewsRaw->firstWhere('date', $date);
+            $dailyViews[$dayName] = $foundViews ? $foundViews->count : 0;
+
+            $rev = Transaction::whereIn('status', ['paid', 'settlement', 'capture'])
+                ->whereDate('created_at', $date)
+                ->sum('amount');
+            $dailyRevenue[$dayName] = $rev;
         }
 
         // Aktivitas Terbaru
@@ -45,8 +55,10 @@ class Index extends Component
             'totalMovies', 
             'totalViews', 
             'totalWatchlist',
+            'totalRevenue',
             'topMovies',
             'dailyViews',
+            'dailyRevenue',
             'recentActivity'
         ))->layout('admin.dashboard-layout');
     }

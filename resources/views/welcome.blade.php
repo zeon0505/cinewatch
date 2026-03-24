@@ -126,6 +126,10 @@
             </div>
         </section>
         @endif
+        
+        @auth
+            @livewire('recommendations')
+        @endauth
 
         <section id="trending" class="row-container fade-in-up">
             <div class="px-4 mb-2 flex items-center justify-between">

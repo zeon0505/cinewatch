@@ -80,6 +80,9 @@
                     <li><a href="/" wire:navigate class="hover:text-white transition-colors {{ request()->is('/') ? 'text-red-500' : '' }}">Beranda</a></li>
                     <li><a href="{{ route('trending') }}" wire:navigate class="hover:text-white transition-colors {{ request()->routeIs('trending') ? 'text-red-500' : '' }}">Trending</a></li>
                     <li><a href="{{ route('new.releases') }}" wire:navigate class="hover:text-white transition-colors {{ request()->routeIs('new.releases') ? 'text-red-500' : '' }}">Terbaru</a></li>
+                    @auth
+                    <li><a href="{{ route('user.watchlist') }}" wire:navigate class="hover:text-white transition-colors {{ request()->routeIs('user.watchlist') ? 'text-red-500' : '' }}">Watchlist</a></li>
+                    @endauth
                     <li><a href="{{ route('subscription') }}" wire:navigate class="text-yellow-500 hover:text-yellow-400 transition-colors">VIP</a></li>
                     <li><a href="{{ route('request.film') }}" wire:navigate class="text-red-500 hover:text-red-400 transition-colors font-bold">Request Film</a></li>
                 </ul>
@@ -197,6 +200,11 @@
                             <a href="{{ route('new.releases') }}" @click="mobileMenu = false" class="flex items-center gap-4 px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all {{ request()->is('new-releases*') ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                                 <span class="material-symbols-outlined text-lg">new_releases</span> Terbaru
                             </a>
+                            @auth
+                            <a href="{{ route('user.watchlist') }}" @click="mobileMenu = false" class="flex items-center gap-4 px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all {{ request()->routeIs('user.watchlist') ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                                <span class="material-symbols-outlined text-lg">bookmark</span> Watchlist
+                            </a>
+                            @endauth
                             <a href="{{ route('subscription') }}" @click="mobileMenu = false" class="flex items-center gap-4 px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-yellow-500 bg-yellow-500/5 hover:bg-yellow-500/10 transition-all">
                                 <span class="material-symbols-outlined text-lg">stars</span> Upgrade VIP
                             </a>
@@ -344,6 +352,12 @@
             <span class="material-symbols-outlined text-2xl">help</span>
             <span class="text-[9px] font-black uppercase tracking-widest">Help</span>
         </a>
+        @auth
+        <a href="{{ route('user.watchlist') }}" wire:navigate class="flex flex-col items-center gap-1 {{ request()->is('watchlist*') ? 'nav-item-active' : 'text-gray-500' }}">
+            <span class="material-symbols-outlined text-2xl">bookmark</span>
+            <span class="text-[9px] font-black uppercase tracking-widest">Watchlist</span>
+        </a>
+        @endauth
         @auth
         <a href="{{ route('profiles') }}" wire:navigate class="flex flex-col items-center gap-1 {{ request()->is('profiles*') ? 'nav-item-active' : 'text-gray-500' }}">
             <div class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center border border-white/20">

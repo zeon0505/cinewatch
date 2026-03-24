@@ -1,15 +1,37 @@
 {
-  "name": "CINEWATCH",
+  "name": "CINEWATCH — Dunia Film Tanpa Batas",
   "short_name": "Cinewatch",
-  "start_url": "/",
+  "description": "Nonton film dan serial terbaru dengan kualitas terbaik di Cinewatch.",
+  "start_url": "/?utm_source=pwa",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#E50914",
+  "orientation": "portrait",
+  "scope": "/",
   "icons": [
     {
       "src": "/pwa-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Trending Now",
+      "url": "/trending",
+      "icons": [{ "src": "/pwa-icon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Watchlist",
+      "url": "/watchlist",
+      "icons": [{ "src": "/pwa-icon.png", "sizes": "192x192" }]
     }
   ]
 }

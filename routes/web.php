@@ -167,6 +167,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::get('/profile', \App\Livewire\User\Profile::class)->name('user.profile');
+    Route::get('/watchlist', \App\Livewire\User\Watchlist::class)->name('user.watchlist');
     Route::get('/request-film', \App\Livewire\RequestFilm::class)->name('request.film');
 
     // Fitur Kelola Film Khusus User
