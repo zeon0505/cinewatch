@@ -87,6 +87,54 @@ Route::get('/terms', function() { return view('pages.terms'); })->name('terms');
 
 Route::post('/payments/webhook', [App\Http\Controllers\PaymentController::class, 'webhook']);
 
+// AI Chat Proxy — browser call this, server forwards to Groq (Pollinations blocked by ISP)
+Route::post('/ai/chat', function (\Illuminate\Http\Request $request) {
+    $request->validate(['message' => 'required|string|max:500']);
+    $userMessage = $request->input('message');
+
+    $groqKey = config('services.groq.key');
+
+    if (!$groqKey) {
+        return response()->json(['error' => 'API key belum diset. Hubungi admin.'], 503);
+    }
+
+    $payload = [
+        'model'    => 'llama-3.3-70b-versatile',
+        'messages' => [
+            ['role' => 'system',  'content' => 'Kamu adalah Customer Service pintar dari platform film legal bernama "Cinewatch". Gunakan bahasa gaul tapi sopan. Sangat membantu, ringkas, maksimal 2 paragraf singkat.'],
+            ['role' => 'user',    'content' => $userMessage],
+        ],
+        'max_tokens' => 300,
+        'temperature' => 0.7,
+    ];
+
+    $ch = curl_init('https://api.groq.com/openai/v1/chat/completions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $groqKey,
+        'Content-Type: application/json',
+    ]);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlErr  = curl_error($ch);
+    curl_close($ch);
+
+    if ($curlErr || $httpCode < 200 || $httpCode >= 300) {
+        \Illuminate\Support\Facades\Log::error("Groq AI error: HTTP $httpCode | cURL: $curlErr | Response: $response");
+        return response()->json(['error' => 'Koneksi ke AI gagal. Coba lagi ya!'], 502);
+    }
+
+    $data  = json_decode($response, true);
+    $reply = $data['choices'][0]['message']['content'] ?? 'Maaf, respons AI kosong.';
+
+    return response()->json(['reply' => trim($reply)]);
+})->name('ai.chat');
+
 // Subtitle CORS Proxy
 Route::get('/subtitle-cors/{id}', function($id) {
     $movie = \App\Models\Movie::findOrFail($id);

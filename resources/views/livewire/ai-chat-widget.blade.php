@@ -1,21 +1,65 @@
-<div 
-    x-data="{ 
+<div
+    x-data="{
         isOpen: @entangle('isOpen'),
+        isTyping: false,
+        newMessage: '',
+
         scrollToBottom() {
             const chatBox = document.getElementById('ai-chat-box')
             if (chatBox) {
-                setTimeout(() => {
-                    chatBox.scrollTop = chatBox.scrollHeight
-                }, 100)
+                setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight }, 80)
             }
+        },
+
+        async sendMessage() {
+            const msg = this.newMessage.trim()
+            if (!msg || this.isTyping) return
+
+            this.newMessage = ''
+            this.isTyping = true
+
+            // Tambahkan pesan user via Livewire
+            await $wire.addMessage('user', msg)
+            this.scrollToBottom()
+
+            try {
+                const csrfToken = document.querySelector('meta[name=csrf-token]')?.getAttribute('content') || ''
+
+                const response = await fetch('/ai/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ message: msg }),
+                    signal: AbortSignal.timeout(25000),
+                })
+
+                const data = await response.json()
+
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || 'HTTP ' + response.status)
+                }
+
+                await $wire.addMessage('assistant', data.reply)
+            } catch (err) {
+                console.error('AI chat error:', err)
+                const errMsg = err.name === 'TimeoutError'
+                    ? 'Koneksi ke AI timeout. Coba lagi ya!'
+                    : (err.message || 'Server AI lagi gangguan. Coba beberapa saat lagi!')
+                await $wire.addMessage('assistant', errMsg)
+            }
+
+            this.isTyping = false
+            this.scrollToBottom()
         }
-    }" 
-    x-init="$watch('isOpen', value => { if(value) scrollToBottom() })"
+    }"
+    x-init="$watch('isOpen', value => { if(value) setTimeout(() => scrollToBottom(), 200) })"
     class="fixed bottom-6 right-6 z-[9999] flex flex-col items-end"
-    @chat-updated.window="scrollToBottom()"
 >
     <!-- Chat Widget Panel -->
-    <div 
+    <div
         x-show="isOpen"
         x-transition:enter="transition ease-out duration-300 transform"
         x-transition:enter-start="opacity-0 translate-y-8 scale-95"
@@ -68,55 +112,53 @@
                 @endif
             @endforeach
 
-            <!-- Typing Indicator -->
-            @if($isTyping)
-                <div class="flex gap-3 max-w-[85%]">
-                    <div class="w-6 h-6 shrink-0 bg-white rounded-full flex items-center justify-center p-0.5 mt-1 border border-white/10">
-                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cinewatch&backgroundColor=transparent" class="w-full h-full rounded-full" />
-                    </div>
-                    <div class="bg-zinc-800 text-gray-200 text-xs px-4 py-3 rounded-2xl rounded-tl-sm border border-white/5 flex items-center gap-1 shadow-sm">
-                        <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                        <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                        <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
-                    </div>
+            <!-- Typing Indicator (JS-controlled) -->
+            <div x-show="isTyping" class="flex gap-3 max-w-[85%]" style="display:none;">
+                <div class="w-6 h-6 shrink-0 bg-white rounded-full flex items-center justify-center p-0.5 mt-1 border border-white/10">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cinewatch&backgroundColor=transparent" class="w-full h-full rounded-full" />
                 </div>
-            @endif
+                <div class="bg-zinc-800 text-gray-200 text-xs px-4 py-3 rounded-2xl rounded-tl-sm border border-white/5 flex items-center gap-1 shadow-sm">
+                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
+                </div>
+            </div>
         </div>
 
         <!-- Input Area -->
         <div class="p-3 bg-zinc-900 border-t border-white/5 relative shrink-0">
-            <!-- Intercepting purely through Livewire, prevent default form submit -->
-            <form wire:submit.prevent="sendMessage" x-data="{ msg: @entangle('newMessage') }" class="flex gap-2 relative">
-                <input 
-                    type="text" 
-                    x-model="msg"
-                    placeholder="Tanya Yoyo seputar film..." 
-                    class="w-full bg-black/50 border border-white/10 text-white text-xs rounded-xl px-4 py-3 pb-3 pr-12 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all font-medium placeholder-gray-600"
-                    {{ $isTyping ? 'disabled' : '' }}
+            <div class="flex gap-2 relative">
+                <input
+                    type="text"
+                    x-model="newMessage"
+                    @keydown.enter.prevent="sendMessage()"
+                    :disabled="isTyping"
+                    placeholder="Tanya Yoyo seputar film..."
+                    class="w-full bg-black/50 border border-white/10 text-white text-xs rounded-xl px-4 py-3 pb-3 pr-12 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all font-medium placeholder-gray-600 disabled:opacity-50"
                 >
-                <button 
-                    type="submit" 
-                    class="absolute right-1.5 top-1.5 bottom-1.5 w-8 flex items-center justify-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    x-bind:disabled="!msg || msg.trim().length === 0 || {{ $isTyping ? 'true' : 'false' }}"
-                    @click="setTimeout(() => scrollToBottom(), 100)"
+                <button
+                    type="button"
+                    @click="sendMessage()"
+                    :disabled="!newMessage.trim() || isTyping"
+                    class="absolute right-1.5 top-1.5 bottom-1.5 w-8 flex items-center justify-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                     <span class="material-symbols-outlined text-[16px] -rotate-45 ml-1">send</span>
                 </button>
-            </form>
+            </div>
             <div class="text-center mt-2">
-                <span class="text-[8px] text-gray-600 font-bold uppercase tracking-widest">Powered by Gemini AI</span>
+                <span class="text-[8px] text-gray-600 font-bold uppercase tracking-widest">Powered by Pollinations AI</span>
             </div>
         </div>
     </div>
 
     <!-- Floating Trigger Button -->
-    <button 
+    <button
         @click="isOpen = !isOpen"
         class="w-14 h-14 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(229,9,20,0.4)] hover:scale-105 active:scale-95 transition-all group relative border border-red-400/30"
     >
         <span x-show="!isOpen" class="material-symbols-outlined text-[28px] group-hover:rotate-12 transition-transform">smart_toy</span>
         <span x-show="isOpen" style="display: none;" class="material-symbols-outlined text-[28px] rotate-90 group-hover:rotate-0 transition-transform">close</span>
-        
+
         <!-- Online Indicator Pulse -->
         <span x-show="!isOpen" class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[#050505] rounded-full z-10"></span>
         <span x-show="!isOpen" class="absolute top-0 right-0 w-3.5 h-3.5 bg-green-500 rounded-full animate-ping z-0"></span>
