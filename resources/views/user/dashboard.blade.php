@@ -1,7 +1,27 @@
 <x-layouts.dashboard>
     @php
-        $watchlist = \App\Models\Watchlist::where('user_id', auth()->id())->with('movie')->latest()->get();
-        $histories = \App\Models\History::where('user_id', auth()->id())->with('movie')->latest()->take(5)->get();
+        $isKids = session('is_kids_mode', false);
+        $watchlist = \App\Models\Watchlist::where('user_id', auth()->id())
+            ->whereHas('movie', function($q) use ($isKids) {
+                $q->when($isKids, fn($sq) => $sq->kids());
+            })
+            ->with(['movie' => function($q) use ($isKids) {
+                $q->when($isKids, fn($sq) => $sq->kids());
+            }])
+            ->latest()
+            ->get();
+
+        $histories = \App\Models\History::where('user_id', auth()->id())
+            ->whereHas('movie', function($q) use ($isKids) {
+                $q->when($isKids, fn($sq) => $sq->kids());
+            })
+            ->with(['movie' => function($q) use ($isKids) {
+                $q->when($isKids, fn($sq) => $sq->kids());
+            }])
+            ->latest()
+            ->take(5)
+            ->get();
+
         $ratings = \App\Models\Rating::where('user_id', auth()->id())->count();
     @endphp
 

@@ -54,9 +54,11 @@
                         <button wire:click="$set('audienceFilter', 'kids')" class="flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all {{ $audienceFilter === 'kids' ? 'bg-yellow-500 text-black shadow-lg shadow-yellow-500/20' : 'text-gray-500 hover:text-yellow-400' }}">
                             <span class="material-symbols-outlined text-[14px]">child_care</span> Kids
                         </button>
+                        @if(!$isKids)
                         <button wire:click="$set('audienceFilter', 'adult')" class="flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all {{ $audienceFilter === 'adult' ? 'bg-red-600 text-white shadow-lg shadow-red-600/20' : 'text-gray-500 hover:text-red-400' }}">
                             <span class="material-symbols-outlined text-[14px]">no_adult_content</span> Adult
                         </button>
+                        @endif
                     </div>
                 </div>
 
@@ -77,6 +79,11 @@
         <div class="flex items-center gap-2 mb-6">
             <span class="material-symbols-outlined text-white opacity-80">grid_view</span>
             <h2 class="text-white font-black text-lg uppercase tracking-widest">Katalog Film</h2>
+            @if($isKids)
+                <span class="bg-yellow-500 text-black px-2 py-0.5 rounded text-[10px] font-black uppercase">KIDS MODE ACTIVE</span>
+            @else
+                <span class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-black uppercase">NORMAL MODE ACTIVE</span>
+            @endif
         </div>
 
         <!-- Film Grid with Dropdown per Card -->

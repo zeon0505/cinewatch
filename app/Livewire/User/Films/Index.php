@@ -48,9 +48,12 @@ class Index extends Component
     #[Layout('components.layouts.dashboard')]
     public function render()
     {
+        $isKids = session('is_kids_mode', false);
+        \Illuminate\Support\Facades\Log::info('DEBUG: is_kids_mode = ' . ($isKids ? 'TRUE' : 'FALSE'));
         $categories = Category::orderBy('name')->get();
         
         $films = Movie::with('categories')
+            ->when($isKids, fn($q) => $q->kids())
             ->when($this->search, function($q) {
                 $q->where('title', 'like', '%' . $this->search . '%');
             })
@@ -76,6 +79,6 @@ class Index extends Component
             ->pluck('movie_id')
             ->toArray();
 
-        return view('livewire.user.films.index', compact('films', 'categories', 'watchlists', 'histories'));
+        return view('livewire.user.films.index', compact('films', 'categories', 'watchlists', 'histories', 'isKids'));
     }
 }
