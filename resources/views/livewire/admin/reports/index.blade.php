@@ -102,64 +102,67 @@
         </div>
     </div>
 
+    @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @endpush
+
+    @script
     <script>
-        document.addEventListener('livewire:initialized', () => {
-            const viewsCtx = document.getElementById('viewsChart');
-            const revenueCtx = document.getElementById('revenueChart');
+        const viewsCtx = document.getElementById('viewsChart');
+        const revenueCtx = document.getElementById('revenueChart');
 
-            new Chart(viewsCtx, {
-                type: 'line',
-                data: {
-                    labels: {!! json_encode(array_keys($dailyViews)) !!},
-                    datasets: [{
-                        label: 'Views',
-                        data: {!! json_encode(array_values($dailyViews)) !!},
-                        borderColor: '#E50914',
-                        backgroundColor: 'rgba(229, 9, 20, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        borderWidth: 4,
-                        pointRadius: 0,
-                        pointHoverRadius: 6,
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#E50914',
-                        pointHoverBorderWidth: 4,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } }
-                    }
+        new Chart(viewsCtx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode(array_keys($dailyViews)) !!},
+                datasets: [{
+                    label: 'Views',
+                    data: {!! json_encode(array_values($dailyViews)) !!},
+                    borderColor: '#E50914',
+                    backgroundColor: 'rgba(229, 9, 20, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#E50914',
+                    pointHoverBorderWidth: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } }
                 }
-            });
+            }
+        });
 
-            new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: {!! json_encode(array_keys($dailyRevenue)) !!},
-                    datasets: [{
-                        label: 'Revenue',
-                        data: {!! json_encode(array_values($dailyRevenue)) !!},
-                        backgroundColor: '#22c55e',
-                        borderRadius: 8,
-                        barThickness: 12,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } }
-                    }
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode(array_keys($dailyRevenue)) !!},
+                datasets: [{
+                    label: 'Revenue',
+                    data: {!! json_encode(array_values($dailyRevenue)) !!},
+                    backgroundColor: '#22c55e',
+                    borderRadius: 8,
+                    barThickness: 12,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, border: { display: false }, ticks: { color: '#444', font: { weight: 'bold', size: 10 } } }
                 }
-            });
+            }
         });
     </script>
+    @endscript
 </div>

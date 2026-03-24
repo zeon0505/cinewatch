@@ -149,8 +149,15 @@
                                 </div>
                             @endif
                             <span class="tag-small !bg-white !text-black mb-1.5">{{ $movie->category->name ?? 'Uncategorized' }}</span>
-                            <h3 class="text-white font-black text-[11px] uppercase tracking-tight mb-1">{{ $movie->title }}</h3>
-                            <p class="text-[9px] text-red-600 font-black uppercase tracking-widest">{{ $movie->duration }}</p>
+                            <h3 class="text-white font-black text-[11px] uppercase tracking-tight mb-1 truncate">{{ $movie->title }}</h3>
+                            <div class="flex items-center justify-between gap-2 mt-1">
+                                <p class="text-[9px] text-red-600 font-black uppercase tracking-widest">{{ $movie->duration }}</p>
+                                @auth
+                                    <div @click.stop="" class="scale-75 origin-right">
+                                        <livewire:⚡watchlist-button :movieId="$movie->id" :key="'trending-'.$movie->id" :showText="false" />
+                                    </div>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                     @empty
@@ -193,7 +200,12 @@
                                     <span class="material-symbols-outlined text-[8px]">workspace_premium</span> VIP
                                 </div>
                             @endif
-                            <h3 class="text-white font-black text-[11px] uppercase">{{ $movie->title }}</h3>
+                            <h3 class="text-white font-black text-[11px] uppercase truncate mb-1">{{ $movie->title }}</h3>
+                            @auth
+                                <div @click.stop="" class="scale-75 origin-center mt-2">
+                                    <livewire:⚡watchlist-button :movieId="$movie->id" :key="'latest-'.$movie->id" :showText="false" />
+                                </div>
+                            @endauth
                         </div>
                     </div>
                     @empty

@@ -13,10 +13,15 @@
             @foreach($results as $movie)
                 <a href="{{ route('movie.detail', $movie->slug) }}" class="flex items-center gap-3 p-3 hover:bg-white/5 transition-colors group">
                     <img src="{{ $movie->thumbnail }}" class="w-12 h-16 object-cover rounded shadow shadow-black" />
-                    <div>
-                        <p class="text-xs font-bold text-white group-hover:text-red-500">{{ $movie->title }}</p>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-bold text-white group-hover:text-red-500 truncate">{{ $movie->title }}</p>
                         <p class="text-[10px] text-gray-400">{{ $movie->category->name ?? 'Film' }}</p>
                     </div>
+                    @auth
+                        <div @click.stop="" class="scale-50 origin-right">
+                             <livewire:⚡watchlist-button :movieId="$movie->id" :key="'search-'.$movie->id" :showText="false" />
+                        </div>
+                    @endauth
                 </a>
             @endforeach
         @else

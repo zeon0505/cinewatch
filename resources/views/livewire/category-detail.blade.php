@@ -24,10 +24,16 @@
             <div class="relative aspect-[2/3] rounded-lg overflow-hidden bg-neutral-900 border border-white/5 transition-all group-hover:scale-105 group-hover:-translate-y-2 group-hover:shadow-2xl">
                 <img src="{{ $movie->thumbnail }}" class="w-full h-full object-cover transition-filter group-hover:brightness-50" />
                 <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                    <h3 class="text-white font-bold text-[10px] uppercase tracking-wide leading-tight mb-1">{{ $movie->title }}</h3>
-                    <div class="flex items-center justify-between">
+                    <h3 class="text-white font-bold text-[10px] uppercase tracking-wide leading-tight mb-1 truncate">{{ $movie->title }}</h3>
+                    <div class="flex items-center justify-between gap-2">
                          <span class="text-[8px] text-[#E50914] font-black uppercase tracking-widest">{{ $movie->duration }}</span>
-                         <span class="material-symbols-outlined text-[14px] text-yellow-500">star</span>
+                         @auth
+                            <div @click.stop="" class="scale-50 origin-right transition-transform hover:scale-75">
+                                <livewire:⚡watchlist-button :movieId="$movie->id" :key="'cat-'.$movie->id" :showText="false" />
+                            </div>
+                         @else
+                            <span class="material-symbols-outlined text-[14px] text-yellow-500">star</span>
+                         @endauth
                     </div>
                 </div>
             </div>

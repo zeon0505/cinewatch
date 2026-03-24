@@ -56,12 +56,19 @@
                         </div>
                         <div class="px-1">
                             <h3 class="text-white font-black text-sm uppercase tracking-tight line-clamp-1 group-hover/card:text-red-500 transition-colors mb-1">{{ $movie->title }}</h3>
-                            <div class="flex items-center gap-3">
-                                <span class="text-[10px] text-gray-500 font-black uppercase tracking-widest">{{ $movie->category->name ?? 'Film' }}</span>
-                                <div class="w-1 h-1 bg-gray-700 rounded-full"></div>
-                                <span class="text-[10px] text-yellow-500 font-black tracking-widest flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-[10px]">star_rate</span> 8.9
-                                </span>
+                            <div class="flex items-center justify-between mt-1">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-[10px] text-gray-500 font-black uppercase tracking-widest">{{ $movie->category->name ?? 'Film' }}</span>
+                                    <div class="w-1 h-1 bg-gray-700 rounded-full"></div>
+                                    <span class="text-[10px] text-yellow-500 font-black tracking-widest flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[10px]">star_rate</span> 8.9
+                                    </span>
+                                </div>
+                                @auth
+                                    <div @click.stop="" class="scale-50 origin-right -mr-2">
+                                        <livewire:⚡watchlist-button :movieId="$movie->id" :key="'reco-'.$movie->id" :showText="false" />
+                                    </div>
+                                @endauth
                             </div>
                         </div>
                     </div>
