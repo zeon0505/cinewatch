@@ -125,6 +125,15 @@ class Subscription extends Component
     #[Layout('components.layouts.app')]
     public function render()
     {
+        if (Auth::check()) {
+            \Log::info('VIP_PAGE_ACCESS', [
+                'user_id' => Auth::id(),
+                'user_name' => Auth::user()->name,
+                'is_vip' => Auth::user()->is_vip,
+                'vip_until' => Auth::user()->vip_until,
+                'session_profile' => session('active_profile_name')
+            ]);
+        }
         return view('livewire.user.subscription');
     }
 }
