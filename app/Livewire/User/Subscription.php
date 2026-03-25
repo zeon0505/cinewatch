@@ -79,52 +79,64 @@ class Subscription extends Component
     {
         if (!Auth::check()) return;
 
-        $transaction = Transaction::where('user_id', Auth::id())
+        $transactions = Transaction::where('user_id', Auth::id())
             ->where('status', 'pending')
-            ->latest()
-            ->first();
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        if (!$transaction) {
+        if ($transactions->isEmpty()) {
             session()->flash('error', 'Tidak ada transaksi pending.');
             return;
         }
 
         $serverKey = config('services.midtrans.server_key');
-        $url = config('services.midtrans.is_production')
-            ? "https://api.midtrans.com/v2/{$transaction->external_id}/status"
-            : "https://api.sandbox.midtrans.com/v2/{$transaction->external_id}/status";
+        $isProduction = config('services.midtrans.is_production');
+        
+        $hasCheckedAtLeastOneRealTransaction = false;
+        $lastStatusMsg = 'Semua transaksi pending.';
 
-        try {
-            $response = Http::withBasicAuth($serverKey, '')->get($url);
-            $json = $response->json();
-            
-            if ($response->successful() && isset($json['transaction_status'])) {
-                $status = $json['transaction_status'];
+        foreach ($transactions as $transaction) {
+            $url = $isProduction
+                ? "https://api.midtrans.com/v2/{$transaction->external_id}/status"
+                : "https://api.sandbox.midtrans.com/v2/{$transaction->external_id}/status";
+
+            try {
+                $response = Http::withBasicAuth($serverKey, '')->get($url);
+                $json = $response->json();
                 
-                if (in_array($status, ['capture', 'settlement'])) {
-                    $user = Auth::user();
-                    $currentVipUntil = ($user->vip_until && $user->vip_until->isFuture()) 
-                        ? $user->vip_until 
-                        : now();
+                if ($response->successful() && isset($json['transaction_status'])) {
+                    $status = $json['transaction_status'];
+                    $hasCheckedAtLeastOneRealTransaction = true;
+                    $lastStatusMsg = 'Status terakhir: ' . strtoupper($status);
+                    
+                    if (in_array($status, ['capture', 'settlement'])) {
+                        $user = Auth::user();
+                        $currentVipUntil = ($user->vip_until && $user->vip_until->isFuture()) 
+                            ? $user->vip_until 
+                            : now();
 
-                    $user->update([
-                        'is_vip' => true,
-                        'vip_until' => $currentVipUntil->addDays(30)
-                    ]);
+                        $user->update([
+                            'is_vip' => true,
+                            'vip_until' => $currentVipUntil->addDays(30)
+                        ]);
 
-                    $transaction->update(['status' => 'settlement']);
-                    session()->flash('success', 'Selamat! VIP Berhasil diaktifkan secara manual.');
+                        $transaction->update(['status' => 'settlement']);
+                        session()->flash('success', 'Selamat! VIP Berhasil diaktifkan secara manual.');
+                        return; // Stop checking once we find a paid one
+                    }
+                } elseif (isset($json['status_message']) && strpos(strtolower($json['status_message']), 'not exist') !== false) {
+                    continue; // Midtrans doesn't know this one yet, try next
                 } else {
-                    session()->flash('error', 'Status di Midtrans masih: ' . strtoupper($status));
+                    $msg = isset($json['status_message']) ? $json['status_message'] : 'Respons tidak valid dari Midtrans';
+                    $lastStatusMsg = "Gagal (Midtrans): " . $msg;
                 }
-            } else {
-                // Return error from Midtrans or generic message
-                $msg = isset($json['status_message']) ? $json['status_message'] : 'Respons tidak valid dari Midtrans';
-                session()->flash('error', "Gagal (Midtrans): " . $msg);
+            } catch (\Exception $e) {
+                // Ignore exception and continue checking others
+                $lastStatusMsg = 'Error: ' . $e->getMessage();
             }
-        } catch (\Exception $e) {
-            session()->flash('error', 'Gagal cek status: ' . $e->getMessage());
         }
+        
+        session()->flash('error', $hasCheckedAtLeastOneRealTransaction ? $lastStatusMsg : "Belum ada pembayaran yang selesai di Midtrans.");
     }
 
     #[Layout('components.layouts.app')]
