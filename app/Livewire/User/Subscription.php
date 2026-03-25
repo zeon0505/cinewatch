@@ -77,7 +77,10 @@ class Subscription extends Component
 
     public function checkStatus()
     {
-        if (!Auth::check()) return;
+        if (!Auth::check()) {
+            session()->flash('error', 'Silakan Login terlebih dahulu untuk mengecek status.');
+            return;
+        }
 
         $transactions = Transaction::where('user_id', Auth::id())
             ->where('status', 'pending')
