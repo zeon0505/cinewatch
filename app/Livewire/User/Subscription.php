@@ -96,9 +96,10 @@ class Subscription extends Component
 
         try {
             $response = Http::withBasicAuth($serverKey, '')->get($url);
+            $json = $response->json();
             
-            if ($response->successful()) {
-                $status = $response->json()['transaction_status'];
+            if ($response->successful() && isset($json['transaction_status'])) {
+                $status = $json['transaction_status'];
                 
                 if (in_array($status, ['capture', 'settlement'])) {
                     $user = Auth::user();
@@ -116,6 +117,10 @@ class Subscription extends Component
                 } else {
                     session()->flash('error', 'Status di Midtrans masih: ' . strtoupper($status));
                 }
+            } else {
+                // Return error from Midtrans or generic message
+                $msg = isset($json['status_message']) ? $json['status_message'] : 'Respons tidak valid dari Midtrans';
+                session()->flash('error', "Gagal (Midtrans): " . $msg);
             }
         } catch (\Exception $e) {
             session()->flash('error', 'Gagal cek status: ' . $e->getMessage());
