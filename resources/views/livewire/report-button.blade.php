@@ -26,9 +26,9 @@
             <form wire:submit.prevent="submit" class="space-y-4">
                 <div x-data="{ open: false }">
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Jenis Masalah</label>
-                    <div class="relative">
+                    <div class="relative transition-all" :class="open ? 'z-50' : 'z-10'">
                         <div @click="open = !open" @click.away="open = false" 
-                             class="w-full bg-zinc-800 border border-white/10 rounded p-3 text-sm text-white hover:border-white/20 transition-all cursor-pointer flex justify-between items-center group">
+                             class="w-full bg-zinc-800 border border-white/10 rounded px-4 py-2.5 text-xs hover:border-white/20 transition-all cursor-pointer flex justify-between items-center group">
                              <span class="font-bold text-white transition-colors">
                                 @if($type == 'link_mati') Link Mati / Video Tidak Putar 
                                 @elseif($type == 'subtitle_rusak') Subtitle Kosong / Error
@@ -40,12 +40,12 @@
                         </div>
                         
                         <div x-show="open" x-transition.opacity 
-                             class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col p-1" style="display: none;">
+                             class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col p-1.5" style="display: none;">
                              
                              @php $options = ['link_mati' => 'Link Mati / Video Tidak Putar', 'subtitle_rusak' => 'Subtitle Kosong / Error', 'audio_rusak' => 'Audio Bermasalah', 'lainnya' => 'Masalah Lainnya']; @endphp
                              @foreach($options as $val => $label)
                              <div wire:click="$set('type', '{{ $val }}')" @click="open = false" 
-                                  class="px-4 py-3 text-xs font-bold cursor-pointer transition-all flex items-center gap-2 {{ $type == $val ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                                  class="px-4 py-2.5 text-xs font-bold cursor-pointer transition-all flex items-center gap-2 {{ $type == $val ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
                                   <span class="material-symbols-outlined text-[14px] {{ $type == $val ? 'opacity-100' : 'opacity-0' }}">check</span>
                                   {{ $label }}
                              </div>

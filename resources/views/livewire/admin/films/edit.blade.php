@@ -110,15 +110,15 @@
                     </div>
                 </div>
 
-                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl relative" x-data="{ open: false }">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl relative transition-all" x-data="{ open: false }" :class="open ? 'z-50' : 'z-10'">
                      <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-red-600">collections</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Koleksi & Series</h3>
                     </div>
                     
                     <div @click="open = !open" @click.away="open = false" 
-                         class="w-full bg-black/40 border border-white/10 rounded-xl p-4 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer flex justify-between items-center group">
-                         <span class="font-bold text-sm uppercase tracking-widest transition-colors {{ $series_id ? 'text-white' : 'text-gray-500' }}">
+                         class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer flex justify-between items-center group">
+                         <span class="font-bold text-xs uppercase tracking-wider transition-colors {{ $series_id ? 'text-white' : 'text-gray-500' }}">
                             @if($series_id) 
                                 {{ collect($series)->where('id', $series_id)->first()->name ?? '-- Tidak Terhubung --' }} 
                             @else 
@@ -130,17 +130,17 @@
 
                     <!-- Dropdown Menu -->
                     <div x-show="open" x-transition.opacity 
-                         class="absolute top-full left-0 right-0 mt-3 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-2" x-cloak style="display: none;">
+                         class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-1.5" x-cloak style="display: none;">
                          
                          <div wire:click="$set('series_id', null)" @click="open = false" 
-                              class="px-5 py-3 flex items-center gap-3 rounded-lg text-[10px] font-black uppercase tracking-[3px] cursor-pointer transition-all {{ !$series_id ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-500 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                              class="px-4 py-2.5 flex items-center gap-3 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-all {{ !$series_id ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
                               <span class="material-symbols-outlined text-[16px] {{ !$series_id ? 'opacity-100' : 'opacity-0' }}">check</span>
                               -- Tidak Terhubung Series --
                          </div>
                          
                          @foreach($series as $s)
                          <div wire:click="$set('series_id', {{ $s->id }})" @click="open = false" 
-                              class="px-5 py-3 flex items-center gap-3 rounded-lg text-[10px] font-black uppercase tracking-[3px] cursor-pointer transition-all {{ $series_id == $s->id ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                              class="px-4 py-2.5 flex items-center gap-3 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-all {{ $series_id == $s->id ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
                               <span class="material-symbols-outlined text-[16px] {{ $series_id == $s->id ? 'opacity-100' : 'opacity-0' }}">check</span>
                               {{ $s->name }}
                          </div>
