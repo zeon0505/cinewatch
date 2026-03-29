@@ -39,8 +39,8 @@
                     <div class="space-y-2">
                         <label class="text-[10px] text-gray-400 font-black uppercase tracking-widest block">Target Penonton (Audience)</label>
                         <select wire:model="audience_type" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[#E50914] outline-none transition-all font-medium appearance-none">
-                            <option value="adult">ADULT (Dewasa / 13+)</option>
-                            <option value="kids">KIDS (Anak-anak)</option>
+                            <option value="adult" class="bg-[#0D0D0D] text-white">ADULT (Dewasa / 13+)</option>
+                            <option value="kids" class="bg-[#0D0D0D] text-white">KIDS (Anak-anak)</option>
                         </select>
                         @error('audience_type') <span class="text-red-500 text-[10px] uppercase font-bold tracking-widest mt-1 block">{{ $message }}</span> @enderror
                     </div>

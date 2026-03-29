@@ -19,11 +19,11 @@
                     <div>
                         <label class="block text-xs font-black uppercase tracking-widest text-gray-500 mb-2 italic">Kendala yang Dialami</label>
                         <select class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none transition-all appearance-none">
-                            <option>Video tidak bisa diputar (Loading terus)</option>
-                            <option>Video terhapus (File missing)</option>
-                            <option>Subtitle tidak muncul / error</option>
-                            <option>Suara hilang / pecah</option>
-                            <option>Lainnya</option>
+                            <option class="bg-[#0D0D0D] text-white">Video tidak bisa diputar (Loading terus)</option>
+                            <option class="bg-[#0D0D0D] text-white">Video terhapus (File missing)</option>
+                            <option class="bg-[#0D0D0D] text-white">Subtitle tidak muncul / error</option>
+                            <option class="bg-[#0D0D0D] text-white">Suara hilang / pecah</option>
+                            <option class="bg-[#0D0D0D] text-white">Lainnya</option>
                         </select>
                     </div>
 

@@ -27,10 +27,10 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Jenis Masalah</label>
                     <select wire:model="type" class="w-full bg-zinc-800 border border-white/10 rounded p-2 text-sm text-white focus:outline-none focus:border-red-600">
-                        <option value="link_mati">Link Mati / Video Tidak Putar</option>
-                        <option value="subtitle_rusak">Subtitle Kosong / Error</option>
-                        <option value="audio_rusak">Audio Bermasalah</option>
-                        <option value="lainnya">Masalah Lainnya</option>
+                        <option value="link_mati" class="bg-[#0D0D0D] text-white">Link Mati / Video Tidak Putar</option>
+                        <option value="subtitle_rusak" class="bg-[#0D0D0D] text-white">Subtitle Kosong / Error</option>
+                        <option value="audio_rusak" class="bg-[#0D0D0D] text-white">Audio Bermasalah</option>
+                        <option value="lainnya" class="bg-[#0D0D0D] text-white">Masalah Lainnya</option>
                     </select>
                 </div>
 
