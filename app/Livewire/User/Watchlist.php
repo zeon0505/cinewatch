@@ -3,12 +3,14 @@
 namespace App\Livewire\User;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Watchlist as WatchlistModel;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 
 class Watchlist extends Component
 {
+    use WithPagination;
     #[Layout('components.layouts.app')]
     public function render()
     {

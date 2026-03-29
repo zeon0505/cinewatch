@@ -3,11 +3,13 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Category;
 use App\Models\Movie;
 
 class CategoryDetail extends Component
 {
+    use WithPagination;
     public $slug;
 
     public function mount($slug)
