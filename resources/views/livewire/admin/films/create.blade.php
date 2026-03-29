@@ -96,10 +96,12 @@
             </div>
             @endif
         </div>
-        <form wire:submit.prevent="store" class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <form wire:submit.prevent="store" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Info (Left) -->
+            <div class="lg:col-span-2 space-y-10">
                 <div class="relative transition-all" x-data="{ open: false }" :class="open ? 'z-[100]' : 'z-10'">
                     <div class="absolute inset-0 bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-[28px] shadow-2xl pointer-events-none"></div>
-                    <div class="relative p-10">
+                    <div class="relative p-8">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-[#E50914]">description</span>
                          <h3 class="text-xs font-black uppercase text-gray-400 tracking-[3px]">Metadata Utama</h3>
@@ -158,7 +160,7 @@
                     </div>
                 </div>
 
-                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[28px] shadow-2xl">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-8 rounded-[28px] shadow-2xl">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-[#E50914]">play_circle</span>
                          <h3 class="text-xs font-black uppercase text-gray-400 tracking-[3px]">Media & Stream</h3>

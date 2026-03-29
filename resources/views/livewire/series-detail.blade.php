@@ -20,7 +20,7 @@
         @forelse($movies as $index => $movie)
         <a href="{{ route('movie.detail', $movie->slug) }}" 
            class="film-card group animate-fadeInUp" 
-           style="animation-delay: {{ 0.1 + ($index % 12) * 0.05 }}s;">
+           style="{{ 'animation-delay: ' . (0.1 + ($index % 12) * 0.05) . 's;' }}">
             <div class="relative aspect-[2/3] rounded-lg overflow-hidden bg-neutral-900 border border-white/5 transition-all group-hover:scale-105 group-hover:-translate-y-2 group-hover:shadow-2xl">
                 <img src="{{ $movie->thumbnail }}" class="w-full h-full object-cover transition-filter group-hover:brightness-50" />
                 <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
