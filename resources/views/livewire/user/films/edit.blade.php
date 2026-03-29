@@ -36,12 +36,26 @@
                     </div>
 
                     <!-- Audience Type -->
-                    <div class="space-y-2">
+                    <div class="space-y-2 relative" x-data="{ open: false }">
                         <label class="text-[10px] text-gray-400 font-black uppercase tracking-widest block">Target Penonton (Audience)</label>
-                        <select wire:model="audience_type" class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-[#E50914] outline-none transition-all font-medium appearance-none">
-                            <option value="adult" class="bg-[#0D0D0D] text-white">ADULT (Dewasa / 13+)</option>
-                            <option value="kids" class="bg-[#0D0D0D] text-white">KIDS (Anak-anak)</option>
-                        </select>
+                        <div @click="open = !open" @click.away="open = false" 
+                             class="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer flex justify-between items-center group">
+                             <span class="font-medium text-sm text-white transition-colors">
+                                {{ $audience_type == 'adult' ? 'ADULT (Dewasa / 13+)' : 'KIDS (Anak-anak)' }}
+                             </span>
+                             <span class="material-symbols-outlined text-gray-500 transition-transform" :class="open ? 'rotate-180 text-white' : 'group-hover:text-white'">expand_more</span>
+                        </div>
+
+                        <div x-show="open" x-transition.opacity 
+                             class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-2" x-cloak style="display: none;">
+                             @foreach(['adult' => 'ADULT (Dewasa / 13+)', 'kids' => 'KIDS (Anak-anak)'] as $val => $label)
+                             <div wire:click="$set('audience_type', '{{ $val }}')" @click="open = false" 
+                                  class="px-5 py-3 flex items-center gap-3 rounded-lg text-xs font-medium cursor-pointer transition-all {{ $audience_type == $val ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                                  <span class="material-symbols-outlined text-[16px] {{ $audience_type == $val ? 'opacity-100' : 'opacity-0' }}">check</span>
+                                  {{ $label }}
+                             </div>
+                             @endforeach
+                        </div>
                         @error('audience_type') <span class="text-red-500 text-[10px] uppercase font-bold tracking-widest mt-1 block">{{ $message }}</span> @enderror
                     </div>
 

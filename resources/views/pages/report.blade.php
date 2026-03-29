@@ -16,15 +16,26 @@
                         <input type="text" placeholder="Contoh: Spongebob The Movie" class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none transition-all placeholder:text-gray-800">
                     </div>
 
-                    <div>
+                    <div x-data="{ open: false, selected: 'Video tidak bisa diputar (Loading terus)' }" class="relative z-50">
                         <label class="block text-xs font-black uppercase tracking-widest text-gray-500 mb-2 italic">Kendala yang Dialami</label>
-                        <select class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:ring-1 focus:ring-red-600 outline-none transition-all appearance-none">
-                            <option class="bg-[#0D0D0D] text-white">Video tidak bisa diputar (Loading terus)</option>
-                            <option class="bg-[#0D0D0D] text-white">Video terhapus (File missing)</option>
-                            <option class="bg-[#0D0D0D] text-white">Subtitle tidak muncul / error</option>
-                            <option class="bg-[#0D0D0D] text-white">Suara hilang / pecah</option>
-                            <option class="bg-[#0D0D0D] text-white">Lainnya</option>
-                        </select>
+                        <input type="hidden" name="issue" :value="selected">
+                        <div @click="open = !open" @click.away="open = false" 
+                             class="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-sm text-white hover:border-white/20 transition-all cursor-pointer flex justify-between items-center group">
+                             <span x-text="selected" class="font-bold"></span>
+                             <span class="material-symbols-outlined text-gray-500 transition-transform" :class="open ? 'rotate-180 text-white' : 'group-hover:text-white'">expand_more</span>
+                        </div>
+                        
+                        <div x-show="open" x-transition.opacity 
+                             class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-2" x-cloak style="display: none;">
+                             @foreach(['Video tidak bisa diputar (Loading terus)', 'Video terhapus (File missing)', 'Subtitle tidak muncul / error', 'Suara hilang / pecah', 'Lainnya'] as $opt)
+                             <div @click="selected = '{{ $opt }}'; open = false" 
+                                  class="px-5 py-3 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-3"
+                                  :class="selected === '{{ $opt }}' ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent'">
+                                  <span class="material-symbols-outlined text-[16px]" :class="selected === '{{ $opt }}' ? 'opacity-100' : 'opacity-0'">check</span>
+                                  {{ $opt }}
+                             </div>
+                             @endforeach
+                        </div>
                     </div>
 
                     <div>

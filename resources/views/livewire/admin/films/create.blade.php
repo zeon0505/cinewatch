@@ -208,16 +208,38 @@
                     </div>
 
                     <!-- SERIES DROPDOWN -->
-                    <div class="space-y-4 mt-8">
+                    <div class="space-y-4 mt-8 relative" x-data="{ open: false }">
                         <label class="text-[10px] text-gray-500 font-black uppercase tracking-[3px]">Series / Koleksi (Opsional)</label>
-                        <select wire:model="series_id" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] outline-none font-bold text-sm uppercase tracking-widest cursor-pointer appearance-none">
-                            <option value="" class="bg-[#0D0D0D] text-white">-- Tidak termasuk dalam Series --</option>
-                            @foreach($series as $s)
-                                <option value="{{ $s->id }}" class="bg-[#0D0D0D] text-white">{{ $s->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                            <span class="material-symbols-outlined">expand_more</span>
+                        
+                        <div @click="open = !open" @click.away="open = false" 
+                             class="w-full bg-black/40 border border-white/10 rounded-xl p-4 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer flex justify-between items-center group">
+                             <span class="font-bold text-sm uppercase tracking-widest transition-colors {{ $series_id ? 'text-white' : 'text-gray-500' }}">
+                                @if($series_id) 
+                                    {{ collect($series)->where('id', $series_id)->first()->name ?? '-- Tidak Terhubung --' }} 
+                                @else 
+                                    -- Tidak Terhubung Series -- 
+                                @endif
+                             </span>
+                             <span class="material-symbols-outlined text-gray-500 transition-transform" :class="open ? 'rotate-180 text-white' : 'group-hover:text-white'">expand_more</span>
+                        </div>
+
+                        <!-- Dropdown Menu -->
+                        <div x-show="open" x-transition.opacity 
+                             class="absolute top-full left-0 right-0 mt-3 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-2" x-cloak style="display: none;">
+                             
+                             <div wire:click="$set('series_id', null)" @click="open = false" 
+                                  class="px-5 py-3 flex items-center gap-3 rounded-lg text-[10px] font-black uppercase tracking-[3px] cursor-pointer transition-all {{ !$series_id ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-500 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                                  <span class="material-symbols-outlined text-[16px] {{ !$series_id ? 'opacity-100' : 'opacity-0' }}">check</span>
+                                  -- Tidak Terhubung Series --
+                             </div>
+                             
+                             @foreach($series as $s)
+                             <div wire:click="$set('series_id', {{ $s->id }})" @click="open = false" 
+                                  class="px-5 py-3 flex items-center gap-3 rounded-lg text-[10px] font-black uppercase tracking-[3px] cursor-pointer transition-all {{ $series_id == $s->id ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                                  <span class="material-symbols-outlined text-[16px] {{ $series_id == $s->id ? 'opacity-100' : 'opacity-0' }}">check</span>
+                                  {{ $s->name }}
+                             </div>
+                             @endforeach
                         </div>
                     </div>
 

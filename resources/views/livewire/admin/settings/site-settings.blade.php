@@ -41,11 +41,17 @@
                  <h3 class="text-lg font-black text-white uppercase tracking-widest mb-6 border-b border-white/5 pb-4">Hero Slider</h3>
                  <div>
                       <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2">Featured Films (Maksimal 3 direkomendasikan)</label>
-                      <select multiple wire:model="featured_film_ids" class="w-full bg-black/40 border border-white/5 rounded-xl p-3.5 text-white focus:ring-2 focus:ring-red-600 outline-none text-sm h-48">
+                      <div class="space-y-2 h-48 overflow-y-auto custom-scrollbar p-2 bg-black/40 border border-white/5 rounded-xl">
                           @foreach($movies as $movie)
-                              <option value="{{ $movie->id }}" class="bg-[#0D0D0D] text-white">{{ $movie->title }}</option>
+                          <label class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] cursor-pointer transition-all group has-[:checked]:bg-red-600/10 has-[:checked]:border-red-600/30">
+                              <input type="checkbox" wire:model="featured_film_ids" value="{{ $movie->id }}" class="hidden peer">
+                              <div class="w-5 h-5 rounded border border-white/10 flex items-center justify-center peer-checked:bg-red-600 peer-checked:border-red-600 transition-all">
+                                  <span class="material-symbols-outlined text-white text-[14px] scale-0 peer-checked:scale-100 transition-transform">check</span>
+                              </div>
+                              <span class="text-[11px] font-bold text-gray-400 group-hover:text-white peer-checked:text-white uppercase tracking-wider">{{ $movie->title }}</span>
+                          </label>
                           @endforeach
-                      </select>
+                      </div>
                       <p class="text-gray-500 mt-2 text-[10px] italic">Tahan tombol Ctrl (Windows) atau Cmd (Mac) untuk memilih lebih dari satu.</p>
                  </div>
             </div>

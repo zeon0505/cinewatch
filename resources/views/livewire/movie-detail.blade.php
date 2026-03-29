@@ -18,10 +18,14 @@
                     <h1 class="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tight" style="font-family:'Bebas Neue',sans-serif">{{ $movie->title }}</h1>
                     
                     <div class="flex items-center gap-4 mb-6 text-sm text-gray-400">
-                        <span class="text-yellow-500 font-bold">★★★★★ 9.1</span>
-                        <span>{{ $movie->created_at->format('Y') }}</span>
+                        <span class="text-yellow-500 font-bold flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">star</span> {{ number_format($movie->rating_value ?? 9.1, 1) }}</span>
+                        <span>{{ $movie->year ?? $movie->created_at->format('Y') }}</span>
                         <span>{{ $movie->duration }}</span>
+                        @if($movie->age_rating)
+                        <span class="border border-gray-700 px-2 py-0.5 rounded text-xs uppercase">{{ $movie->age_rating }}</span>
+                        @else
                         <span class="border border-gray-700 px-2 py-0.5 rounded text-xs uppercase">17+</span>
+                        @endif
                     </div>
 
                     <div class="flex gap-4">
