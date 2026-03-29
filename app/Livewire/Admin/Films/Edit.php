@@ -7,10 +7,13 @@ use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
-    public $movie_id, $title, $description, $thumbnail, $video_url, $duration, $slug, $year, $tmdb_id;
+    use WithFileUploads;
+
+    public $movie_id, $title, $description, $thumbnail, $video_url, $duration, $slug, $year, $tmdb_id, $posterFile, $is_premium;
     public $category_id; // Legacy
     public $selectedCategories = []; // NEW
     public $audience_type; // NEW
@@ -35,6 +38,7 @@ class Edit extends Component
         $this->rating_value = $movie->rating_value ?? 0.0;
         $this->age_rating = $movie->age_rating ?? 'PG-13';
         $this->series_id = $movie->series_id;
+        $this->is_premium = $movie->is_premium;
         $this->selectedCategories = $movie->categories->pluck('id')->toArray();
     }
 
@@ -50,6 +54,12 @@ class Edit extends Component
         $this->validate();
 
         $movie = Movie::findOrFail($this->movie_id);
+
+        if ($this->posterFile) {
+            $path = $this->posterFile->store('posters', 'public');
+            $this->thumbnail = '/storage/' . $path;
+        }
+
         $movie->update([
             'title' => $this->title,
             'slug' => Str::slug($this->title),
@@ -62,6 +72,7 @@ class Edit extends Component
             'audience_type' => $this->audience_type,
             'rating_value' => $this->rating_value,
             'age_rating' => $this->age_rating,
+            'is_premium' => $this->is_premium,
             'category_id' => $this->selectedCategories[0] ?? null, // Fallback
             'series_id' => $this->series_id ?: null,
         ]);

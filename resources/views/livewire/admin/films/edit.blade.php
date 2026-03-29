@@ -255,7 +255,6 @@
 
     <!-- Premium Styles & Animations -->
     <style>
-        @font-face { font-family: 'Outfit'; font-display: swap; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #E50914; border-radius: 20px; }

@@ -36,60 +36,59 @@
 
         <!-- Dynamic Search & Intelligence -->
         <div class="mb-16 relative z-[200]" x-data="{ query: '' }">
-            <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-transparent rounded-[36px] blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                <div class="relative bg-neutral-900 border border-white/10 p-2 rounded-[32px] shadow-2xl flex items-center gap-4">
+            <div class="relative group max-w-5xl mx-auto">
+                <div class="absolute -inset-1 bg-gradient-to-r from-red-600/20 to-transparent rounded-[28px] blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative bg-neutral-900 border border-white/10 p-1.5 rounded-[24px] shadow-2xl flex items-center gap-3">
                     <div class="flex-1 relative">
-                        <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-red-600 text-3xl opacity-60">database</span>
+                        <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-red-600 text-xl opacity-60">database</span>
                         <input
                             x-model="query"
                             @keydown.enter="$wire.executeSearch(query)"
                             type="text"
-                            placeholder="Cari metadata film dari database global (TMDb)..."
-                            class="w-full bg-white/5 border-none rounded-2xl pl-16 pr-8 py-5 text-white text-xl font-medium outline-none focus:ring-0 placeholder:text-gray-700"
+                            placeholder="Cari metadata film dari TMDb/OMDb..."
+                            class="w-full bg-white/5 border-none rounded-xl pl-14 pr-6 py-3.5 text-white text-base font-medium outline-none focus:ring-0 placeholder:text-gray-700"
                         />
                     </div>
                     <button type="button" 
                         @click="$wire.executeSearch(query)"
-                        class="bg-red-600 hover:bg-black text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-[2px] transition-all hover:ring-2 hover:ring-red-600 shadow-xl shadow-red-900/20 active:scale-95 flex items-center gap-4">
-                        <span>SYNC DATA</span>
-                        <div wire:loading wire:target="executeSearch" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        class="bg-red-600 hover:bg-black text-white px-8 py-3.5 rounded-xl font-black text-[10px] uppercase tracking-[2px] transition-all hover:ring-2 hover:ring-red-600 shadow-xl shadow-red-900/20 active:scale-95 flex items-center gap-3">
+                        <span>SYNC</span>
+                        <div wire:loading wire:target="executeSearch" class="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     </button>
                 </div>
             </div>
 
             <!-- Intelligent Results Panel -->
             @if(count($searchResults) > 0)
-            <div class="absolute top-full left-0 right-0 mt-6 bg-[#050505] border border-white/10 rounded-[32px] shadow-[0_40px_100px_rgba(0,0,0,0.9)] z-[300] overflow-hidden animate-slideUp">
-                <div class="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
-                    <div class="flex items-center gap-4">
-                        <span class="material-symbols-outlined text-red-600">travel_explore</span>
-                        <h4 class="text-white font-black text-xs uppercase tracking-[3px]">Hasi Pencarian Meluncur</h4>
+            <div class="absolute top-full left-0 right-0 mt-4 bg-[#050505] border border-white/10 rounded-[24px] shadow-[0_40px_100px_rgba(0,0,0,0.9)] z-[300] overflow-hidden animate-slideUp max-w-5xl mx-auto">
+                <div class="px-6 py-4 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-red-600 text-sm">travel_explore</span>
+                        <h4 class="text-white font-black text-[10px] uppercase tracking-[3px]">Hasil Pencarian</h4>
                     </div>
                     <button wire:click="$set('searchResults', [])" class="text-gray-600 hover:text-white transition-colors">
-                        <span class="material-symbols-outlined">close</span>
+                        <span class="material-symbols-outlined text-sm">close</span>
                     </button>
                 </div>
                 
-                <div class="max-h-[500px] overflow-y-auto custom-scrollbar p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="max-h-[400px] overflow-y-auto custom-scrollbar p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                     @foreach($searchResults as $index => $item)
                     <div wire:click="selectItem({{ $index }})" 
-                         class="flex items-center gap-6 p-5 rounded-2xl bg-white/5 border border-white/5 hover:border-red-600/50 hover:bg-red-600/5 cursor-pointer transition-all group active:scale-[0.98]">
-                        <div class="w-16 h-24 bg-neutral-900 rounded-xl overflow-hidden shrink-0 shadow-2xl relative">
+                         class="flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-white/5 hover:border-red-600/50 hover:bg-red-600/5 cursor-pointer transition-all group active:scale-[0.98]">
+                        <div class="w-10 h-14 bg-neutral-900 rounded-lg overflow-hidden shrink-0 shadow-2xl relative">
                             @if($item['poster'])
                                 <img src="{{ $item['poster'] }}" class="w-full h-full object-cover transition-transform group-hover:scale-110">
                             @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-white font-black text-base uppercase truncate tracking-tight group-hover:text-red-500 transition-colors">{{ $item['title'] }}</h4>
-                            <div class="flex items-center gap-4 mt-2">
-                                <span class="text-red-600 font-black text-xs uppercase tracking-widest">{{ $item['year'] }}</span>
-                                <span class="px-2 py-0.5 bg-white/5 border border-white/10 rounded-md text-[8px] text-gray-500 font-black uppercase tracking-widest">{{ $item['type'] }}</span>
+                            <h4 class="text-white font-black text-xs uppercase truncate tracking-tight group-hover:text-red-500 transition-colors">{{ $item['title'] }}</h4>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-red-600 font-black text-[9px] uppercase tracking-widest">{{ $item['year'] }}</span>
+                                <span class="px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-[7px] text-gray-600 font-black uppercase tracking-widest">{{ $item['type'] }}</span>
                             </div>
                         </div>
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-600 group-hover:bg-red-600 group-hover:text-white transition-all">
-                            <span class="material-symbols-outlined">auto_fix_high</span>
+                        <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-gray-600 group-hover:bg-red-600 group-hover:text-white transition-all">
+                            <span class="material-symbols-outlined text-xs">add</span>
                         </div>
                     </div>
                     @endforeach
@@ -309,11 +308,6 @@
 
     <!-- Premium Styles & Animations -->
     <style>
-        @font-face {
-            font-family: 'Outfit';
-            font-display: swap;
-        }
-        
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #E50914; border-radius: 20px; }
