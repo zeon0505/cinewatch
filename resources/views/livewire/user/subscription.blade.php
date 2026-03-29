@@ -4,17 +4,19 @@
         <p class="text-gray-400 text-base md:text-lg max-w-xl mx-auto">Buka semua akses film premium tanpa batas dengan kualitas tayangan terbaik.</p>
     </div>
 
-    @if (session()->has('error'))
-        <div class="mb-10 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined text-lg">error</span> {{ session('error') }}
-        </div>
-    @endif
+    <div id="flash-messages">
+        @if (session()->has('error'))
+            <div class="mb-10 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-lg">error</span> {{ session('error') }}
+            </div>
+        @endif
 
-    @if (session()->has('success'))
-        <div class="mb-10 p-4 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2">
-            <span class="material-symbols-outlined text-lg">check_circle</span> {{ session('success') }}
-        </div>
-    @endif
+        @if (session()->has('success'))
+            <div class="mb-10 p-4 bg-green-500/10 border border-green-500/20 text-green-400 rounded-xl text-center font-medium text-sm flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-lg">check_circle</span> {{ session('success') }}
+            </div>
+        @endif
+    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
         <!-- Free Plan -->
@@ -100,7 +102,7 @@
     <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
     <script>
         document.addEventListener('livewire:initialized', () => {
-            @this.on('show-payment', (event) => {
+            Livewire.on('show-payment', (event) => {
                 const token = event.token || (Array.isArray(event) ? event[0].token : null);
                 if (!token) return;
                 

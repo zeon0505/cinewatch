@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 
 class Subscription extends Component
@@ -46,7 +47,8 @@ class Subscription extends Component
         ];
 
         try {
-            $response = Http::withBasicAuth($serverKey, '')
+            $response = Http::withoutVerifying()
+                ->withBasicAuth($serverKey, '')
                 ->post($url, $params);
 
             if ($response->successful()) {
@@ -104,7 +106,7 @@ class Subscription extends Component
                 : "https://api.sandbox.midtrans.com/v2/{$transaction->external_id}/status";
 
             try {
-                $response = Http::withBasicAuth($serverKey, '')->get($url);
+                $response = Http::withoutVerifying()->withBasicAuth($serverKey, '')->get($url);
                 $json = $response->json();
                 
                 if ($response->successful() && isset($json['transaction_status'])) {
@@ -146,7 +148,7 @@ class Subscription extends Component
     public function render()
     {
         if (Auth::check()) {
-            \Log::info('VIP_PAGE_ACCESS', [
+            Log::info('VIP_PAGE_ACCESS', [
                 'user_id' => Auth::id(),
                 'user_name' => Auth::user()->name,
                 'is_vip' => Auth::user()->is_vip,
