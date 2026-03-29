@@ -116,9 +116,9 @@
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Koleksi & Series</h3>
                     </div>
                     <select wire:model="series_id" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm uppercase tracking-widest cursor-pointer appearance-none relative">
-                        <option value="">-- Tidak Terhubung Series --</option>
+                        <option value="" class="bg-[#0D0D0D] text-white">-- Tidak Terhubung Series --</option>
                         @foreach($series as $s)
-                            <option value="{{ $s->id }}">{{ $s->name }}</option>
+                            <option value="{{ $s->id }}" class="bg-[#0D0D0D] text-white">{{ $s->name }}</option>
                         @endforeach
                     </select>
                 </div>

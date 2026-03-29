@@ -211,9 +211,9 @@
                     <div class="space-y-4 mt-8">
                         <label class="text-[10px] text-gray-500 font-black uppercase tracking-[3px]">Series / Koleksi (Opsional)</label>
                         <select wire:model="series_id" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] outline-none font-bold text-sm uppercase tracking-widest cursor-pointer appearance-none">
-                            <option value="">-- Tidak termasuk dalam Series --</option>
+                            <option value="" class="bg-[#0D0D0D] text-white">-- Tidak termasuk dalam Series --</option>
                             @foreach($series as $s)
-                                <option value="{{ $s->id }}">{{ $s->name }}</option>
+                                <option value="{{ $s->id }}" class="bg-[#0D0D0D] text-white">{{ $s->name }}</option>
                             @endforeach
                         </select>
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
