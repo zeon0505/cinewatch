@@ -62,7 +62,7 @@ class Edit extends Component
 
         $movie->update([
             'title' => $this->title,
-            'slug' => Str::slug($this->title),
+            'slug' => $this->generateUniqueSlug($this->title, $this->movie_id),
             'description' => $this->description,
             'thumbnail' => $this->thumbnail,
             'video_url' => $this->video_url,
@@ -81,6 +81,22 @@ class Edit extends Component
 
         session()->flash('message', 'Data film berhasil diperbarui di sistem.');
         return redirect()->route('admin.films.index');
+    }
+
+    protected function generateUniqueSlug($title, $ignoreId = null)
+    {
+        $slug = \Illuminate\Support\Str::slug($title);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (\App\Models\Movie::where('slug', $slug)
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
     }
 
     #[Layout('admin.dashboard-layout')]

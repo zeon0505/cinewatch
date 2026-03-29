@@ -300,7 +300,7 @@ class Create extends Component
 
         $movie = Movie::create([
             'title' => $this->title,
-            'slug' => Str::slug($this->title),
+            'slug' => $this->generateUniqueSlug($this->title),
             'description' => $this->description,
             'thumbnail' => $thumbnailPath,
             'video_url' => $this->video_url,
@@ -320,6 +320,20 @@ class Create extends Component
         $movie->categories()->sync($this->selectedCategories);
 
         return redirect()->route('admin.films.index')->with('message', 'Film CINEWATCH Berhasil Ditambahkan!');
+    }
+
+    protected function generateUniqueSlug($title)
+    {
+        $slug = \Illuminate\Support\Str::slug($title);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (\App\Models\Movie::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
     }
 
     #[Layout('admin.dashboard-layout')]
