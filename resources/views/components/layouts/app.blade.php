@@ -78,6 +78,21 @@
                 <a href="/" class="logo text-3xl md:text-4xl text-red-600">CINEWATCH</a>
                 <ul class="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-[3px] text-gray-400">
                     <li><a href="/" wire:navigate class="hover:text-white transition-colors {{ request()->is('/') ? 'text-red-500' : '' }}">Beranda</a></li>
+                    <li x-data="{ showCats: false }" class="relative" @mouseenter="showCats = true" @mouseleave="showCats = false">
+                        <button class="hover:text-white transition-colors flex items-center gap-1 {{ request()->routeIs('category.detail') ? 'text-red-500' : '' }}">
+                            Kategori <span class="material-symbols-outlined text-sm transition-transform" :class="showCats ? 'rotate-180' : ''">expand_more</span>
+                        </button>
+                        <div x-show="showCats" x-transition.opacity class="absolute top-full left-0 mt-4 w-56 bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[300] overflow-hidden py-2" x-cloak>
+                            <div class="px-4 py-2 border-b border-white/5 mb-1">
+                                <span class="text-[9px] text-gray-500 font-bold uppercase tracking-[3px]">Pilih Kategori / Series</span>
+                            </div>
+                            <div class="max-h-[60vh] overflow-y-auto custom-scrollbar">
+                                @foreach(\App\Models\Category::orderBy('name')->get() as $cat)
+                                    <a href="{{ route('category.detail', $cat->slug) }}" wire:navigate class="block px-4 py-2.5 text-[10px] font-black text-gray-400 hover:text-white hover:bg-white/5 transition-all uppercase tracking-widest">{{ $cat->name }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </li>
                     <li><a href="{{ route('trending') }}" wire:navigate class="hover:text-white transition-colors {{ request()->routeIs('trending') ? 'text-red-500' : '' }}">Trending</a></li>
                     <li><a href="{{ route('new.releases') }}" wire:navigate class="hover:text-white transition-colors {{ request()->routeIs('new.releases') ? 'text-red-500' : '' }}">Terbaru</a></li>
                     @auth
@@ -200,6 +215,19 @@
                             <a href="{{ route('new.releases') }}" @click="mobileMenu = false" class="flex items-center gap-4 px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all {{ request()->is('new-releases*') ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                                 <span class="material-symbols-outlined text-lg">new_releases</span> Terbaru
                             </a>
+                            <div x-data="{ open: false }" class="flex flex-col">
+                                <button @click="open = !open" class="flex items-center justify-between px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                                    <div class="flex items-center gap-4">
+                                        <span class="material-symbols-outlined text-lg">category</span> Kategori / Series
+                                    </div>
+                                    <span class="material-symbols-outlined text-xs transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                                </button>
+                                <div x-show="open" x-transition.opacity class="pl-12 pr-4 py-2 flex flex-col gap-1 border-l border-white/5 ml-6" x-cloak>
+                                    @foreach(\App\Models\Category::orderBy('name')->get() as $cat)
+                                        <a href="{{ route('category.detail', $cat->slug) }}" @click="mobileMenu = false" wire:navigate class="text-[10px] font-bold uppercase tracking-[2px] text-gray-500 hover:text-white transition-colors py-2">{{ $cat->name }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
                             @auth
                             <a href="{{ route('user.watchlist') }}" @click="mobileMenu = false" class="flex items-center gap-4 px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all {{ request()->routeIs('user.watchlist') ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                                 <span class="material-symbols-outlined text-lg">bookmark</span> Watchlist
