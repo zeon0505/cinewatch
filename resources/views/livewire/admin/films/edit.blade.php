@@ -208,7 +208,7 @@
                                 <label class="text-[9px] text-gray-500 font-black uppercase tracking-[3px]">Genre Terkait</label>
                                 <span class="text-[8px] text-red-600 font-black uppercase">{{ count($selectedCategories) }} Terpilih</span>
                             </div>
-                            <div class="grid grid-cols-1 gap-2 max-h-[220px] overflow-y-auto custom-scrollbar pr-2">
+                            <div class="grid grid-cols-1 gap-2 max-h-[180px] overflow-y-auto custom-scrollbar pr-2">
                                 @foreach(\App\Models\Category::all() as $cat)
                                 <label class="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.01] border border-white/5 hover:bg-white/[0.04] cursor-pointer transition-all group has-[:checked]:bg-red-600/5 has-[:checked]:border-red-600/20">
                                     <input type="checkbox" wire:model="selectedCategories" value="{{ $cat->id }}" class="hidden">
@@ -218,6 +218,31 @@
                                     <span class="text-[10px] font-bold text-gray-500 group-has-[:checked]:text-white uppercase">{{ $cat->name }}</span>
                                 </label>
                                 @endforeach
+                            </div>
+                        </div>
+
+                        <!-- SERIES -->
+                        <div class="space-y-4" x-data="{ open: false }">
+                            <label class="text-[9px] text-gray-500 font-black uppercase tracking-[3px]">Series / Koleksi</label>
+                            <div class="relative">
+                                <div @click="open = !open" 
+                                     class="w-full bg-black/60 border border-white/10 rounded-2xl p-4 text-white text-[10px] font-black cursor-pointer hover:border-red-600/50 transition-all flex items-center justify-between group">
+                                     <span class="uppercase tracking-widest">{{ $series_id ? collect($series)->where('id', $series_id)->first()->name ?? 'PILIH SERIES' : 'TANPA SERIES' }}</span>
+                                     <span class="material-symbols-outlined text-sm transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                                </div>
+                                <div x-show="open" @click.away="open = false" 
+                                     class="absolute bottom-full left-0 right-0 mb-3 bg-[#111] border border-white/10 rounded-2xl shadow-3xl z-[300] overflow-hidden p-2 backdrop-blur-3xl max-h-[250px] overflow-y-auto custom-scrollbar">
+                                     <div wire:click="$set('series_id', null)" @click="open = false" 
+                                          class="px-5 py-3 rounded-xl text-[10px] font-black cursor-pointer transition-all {{ !$series_id ? 'bg-red-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5' }}">
+                                          -- TANPA SERIES --
+                                     </div>
+                                     @foreach($series as $s)
+                                     <div wire:click="$set('series_id', {{ $s->id }})" @click="open = false" 
+                                          class="px-5 py-3 rounded-xl text-[10px] font-black cursor-pointer transition-all {{ $series_id == $s->id ? 'bg-red-600 text-white' : 'text-gray-500 hover:text-white hover:bg-white/5' }}">
+                                          {{ strtoupper($s->name) }}
+                                     </div>
+                                     @endforeach
+                                </div>
                             </div>
                         </div>
 
