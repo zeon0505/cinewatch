@@ -110,7 +110,7 @@ class Create extends Component
         $this->showResults = true; // FORCE PANEL SHOW
         
         try {
-            \Log::info('Search triggered for: ' . $query);
+            Log::info('Search triggered for: ' . $query);
             
             // CHECK CONNECTIVITY FIRST
             $check = Http::withoutVerifying()->timeout(3)->get("https://www.omdbapi.com/");
@@ -133,14 +133,14 @@ class Create extends Component
                         'type' => 'omdb'
                     ];
                 })->toArray();
-                \Log::info('Found results in OMDB: ' . count($this->searchResults));
+                Log::info('Found results in OMDB: ' . count($this->searchResults));
             } else {
-                \Log::info('OMDB failed or empty, trying TMDB...');
+                Log::info('OMDB failed or empty, trying TMDB...');
                 // Priority 2: TMDB
                 $this->fetchFromTMDB($query);
             }
         } catch (\Exception $e) {
-            \Log::error('Search Exception: ' . $e->getMessage());
+            Log::error('Search Exception: ' . $e->getMessage());
             $this->fetchFromTMDB($query);
         }
 
@@ -211,7 +211,7 @@ class Create extends Component
                     }
                 }
             } catch (\Exception $e) {
-                \Log::error('Error fetching OMDB details in selectItem: ' . $e->getMessage());
+                Log::error('Error fetching OMDB details in selectItem: ' . $e->getMessage());
             }
         } elseif ($item['type'] === 'tmdb' && $this->tmdb_id) {
             // Fallback to TMDB for details if no IMDB ID or OMDB failed
@@ -233,7 +233,7 @@ class Create extends Component
                     }
                 }
             } catch (\Exception $e) {
-                \Log::error('Error fetching TMDB details in selectItem: ' . $e->getMessage());
+                Log::error('Error fetching TMDB details in selectItem: ' . $e->getMessage());
             }
         } else {
             // Local / Local LK21 data or other types without external API details
