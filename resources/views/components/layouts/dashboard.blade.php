@@ -169,7 +169,7 @@
         </header>
 
         <!-- Scrollable Area -->
-        <div class="flex-1 overflow-y-auto px-4 md:px-6 py-8 custom-scrollbar relative z-10">
+        <div class="flex-1 overflow-y-auto px-2 md:px-4 py-6 custom-scrollbar relative z-10">
             <div class="max-w-full mx-auto pb-96">
                 {{ $slot }}
             </div>

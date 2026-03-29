@@ -1,5 +1,5 @@
 <div class="h-full overflow-y-auto scrollbar-hide">
-    <div class="max-w-6xl mx-auto p-8 pt-0 pb-60">
+    <div class="max-w-full p-4 md:p-8 pt-0 pb-60">
         <!-- Header Section -->
         <div class="flex items-center gap-8 mb-12 animate-fadeIn">
             <a href="{{ route('admin.films.index') }}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-[#E50914] hover:border-transparent transition-all shadow-xl">
@@ -19,10 +19,10 @@
 
         <form wire:submit.prevent="update" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Main Info (Left) -->
-            <div class="lg:col-span-2 space-y-10">
+            <div class="lg:col-span-2 space-y-6">
                 <div class="relative transition-all" x-data="{ open: false }" :class="open ? 'z-[100]' : 'z-10'">
                     <div class="absolute inset-0 bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-[24px] shadow-2xl pointer-events-none"></div>
-                    <div class="relative p-8">
+                    <div class="relative p-6">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-[#E50914]">description</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Metadata Utama</h3>
@@ -31,16 +31,16 @@
                     <div class="space-y-8">
                         <div>
                             <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Judul Film</label>
-                            <input wire:model="title" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
+                            <input wire:model="title" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-3.5 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
                             @error('title') <span class="text-red-500 text-[9px] font-bold mt-2 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
                             <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Deskripsi Narasi</label>
-                            <textarea wire:model="description" rows="5" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800"></textarea>
+                            <textarea wire:model="description" rows="4" class="w-full bg-black/40 border border-white/10 rounded-xl p-3.5 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800"></textarea>
                         </div>
 
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
                                 <label class="block text-gray-400 text-[10px] font-black uppercase tracking-widest mb-4 ml-1">Tahun Rilis</label>
                                 <input wire:model="year" type="number" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-8 rounded-[24px] shadow-2xl">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-6 rounded-[24px] shadow-2xl">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-[#E50914]">video_library</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Media Streaming</h3>
@@ -89,7 +89,7 @@
                     <div>
                         <label class="block text-gray-400 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Alamat Sumber Video (URL)</label>
                         <div class="relative">
-                            <input wire:model="video_url" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 pl-12 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
+                            <input wire:model="video_url" type="text" class="w-full bg-black/40 border border-white/10 rounded-xl p-3.5 pl-12 text-white focus:ring-1 focus:ring-[#E50914] focus:bg-white/5 outline-none font-bold placeholder:text-gray-800" />
                             <span class="material-symbols-outlined absolute left-4 top-4 text-gray-700">link</span>
                         </div>
                     </div>
@@ -97,8 +97,8 @@
             </div>
 
             <!-- Sidebar (Right) -->
-            <div class="space-y-10">
-                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl text-center">
+            <div class="space-y-6">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-6 rounded-[24px] shadow-2xl text-center">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6 justify-center">
                          <span class="material-symbols-outlined text-[#E50914]">image</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Thumbnail</h3>
@@ -115,7 +115,7 @@
                     </div>
                 </div>
 
-                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-8 rounded-[24px] shadow-2xl">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-6 rounded-[24px] shadow-2xl">
                      <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-red-600">category</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Genre & Kategori</h3>
@@ -135,7 +135,7 @@
 
                 <div class="relative transition-all" x-data="{ open: false }" :class="open ? 'z-[100]' : 'z-10'">
                     <div class="absolute inset-0 bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-[24px] shadow-2xl pointer-events-none"></div>
-                    <div class="relative p-10 overflow-visible">
+                    <div class="relative p-6 overflow-visible">
                          <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                              <span class="material-symbols-outlined text-red-600">collections</span>
                              <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Koleksi & Series</h3>
@@ -173,7 +173,7 @@
                     </div>
                 </div>
 
-                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-8 rounded-[24px] shadow-2xl">
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-6 rounded-[24px] shadow-2xl">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-red-600">no_adult_content</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Target Penonton</h3>
