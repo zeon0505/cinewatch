@@ -247,21 +247,42 @@
                         </div>
 
                         <!-- VIP TOGGLE -->
-                        <label class="flex items-center justify-between p-5 rounded-2xl bg-yellow-500/5 border border-yellow-500/10 cursor-pointer group hover:bg-yellow-500/10 transition-all">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500">
-                                    <span class="material-symbols-outlined">verified</span>
+                        <div class="space-y-4">
+                            <label class="flex items-center justify-between p-5 rounded-2xl bg-yellow-500/5 border border-yellow-500/10 cursor-pointer group hover:bg-yellow-500/10 transition-all">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500">
+                                        <span class="material-symbols-outlined">verified</span>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-[10px] font-black uppercase text-yellow-500 tracking-tighter">Gold VIP Access</span>
+                                        <span class="text-[8px] text-gray-600 font-bold uppercase">Hanya Berlangganan</span>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col">
-                                    <span class="text-[10px] font-black uppercase text-yellow-500 tracking-tighter">Gold VIP Access</span>
-                                    <span class="text-[8px] text-gray-600 font-bold uppercase">Hanya Berlangganan</span>
+                                <div class="relative">
+                                    <input type="checkbox" wire:model="is_premium" class="sr-only peer">
+                                    <div class="w-10 h-5 bg-white/5 rounded-full peer-checked:bg-yellow-500/20 transition-all relative after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-700 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-yellow-500"></div>
                                 </div>
+                            </label>
+                        </div>
+
+                        <!-- AUDIENCE CLASSIFICATION -->
+                        <div>
+                            <label class="text-[9px] text-gray-500 font-black uppercase tracking-[3px] mb-4 block">Segmen Penonton</label>
+                            <div class="flex gap-2">
+                                <label class="flex-1 cursor-pointer group">
+                                    <input type="radio" wire:model="audience_type" value="adult" class="hidden peer">
+                                    <div class="py-3 rounded-2xl bg-white/[0.01] border border-white/5 text-center transition-all peer-checked:bg-red-600/10 peer-checked:border-red-600/40 peer-checked:shadow-[0_0_20px_rgba(229,9,20,0.1)]">
+                                        <span class="text-[9px] font-black uppercase text-gray-500 peer-checked:text-white tracking-widest">DEWASA</span>
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer group">
+                                    <input type="radio" wire:model="audience_type" value="kids" class="hidden peer">
+                                    <div class="py-3 rounded-2xl bg-white/[0.01] border border-white/5 text-center transition-all peer-checked:bg-yellow-500/10 peer-checked:border-yellow-500/40 peer-checked:shadow-[0_0_20px_rgba(245,158,11,0.1)]">
+                                        <span class="text-[9px] font-black uppercase text-gray-500 peer-checked:text-white tracking-widest">ANAK</span>
+                                    </div>
+                                </label>
                             </div>
-                            <div class="relative">
-                                <input type="checkbox" wire:model="is_premium" class="sr-only peer">
-                                <div class="w-10 h-5 bg-white/5 rounded-full peer-checked:bg-yellow-500/20 transition-all relative after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-700 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5 peer-checked:after:bg-yellow-500"></div>
-                            </div>
-                        </label>
+                        </div>
                     </div>
                 </div>
 
