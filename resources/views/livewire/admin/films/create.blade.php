@@ -1,5 +1,5 @@
 <div class="h-full overflow-y-auto scrollbar-hide">
-    <div class="max-w-full p-4 md:p-8 pt-0 pb-60">
+    <div class="w-full p-4 md:p-8 pt-0 pb-60">
         <!-- Header Section -->
         <div class="flex items-center gap-8 mb-12 animate-fadeIn">
             <a href="{{ route('admin.films.index') }}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-[#E50914] transition-all shadow-xl">
@@ -96,9 +96,9 @@
             </div>
             @endif
         </div>
-        <form wire:submit.prevent="store" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Info (Left) -->
-            <div class="lg:col-span-2 space-y-6">
+    <form wire:submit.prevent="store" class="w-full flex flex-col lg:flex-row gap-8 items-start">
+        <!-- Main Info (Left) -->
+        <div class="w-full lg:w-[70%] space-y-6">
                 <div class="relative transition-all" x-data="{ open: false }" :class="open ? 'z-[100]' : 'z-10'">
                     <div class="absolute inset-0 bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-[28px] shadow-2xl pointer-events-none"></div>
                     <div class="relative p-6">
@@ -171,10 +171,10 @@
                         <p class="text-[8px] text-gray-700 uppercase font-bold mt-2 tracking-widest italic leading-relaxed">Peringatan: Gunakan URL yang diizinkan untuk iframe/embed agar player berfungsi.</p>
                     </div>
                 </div>
-            </div>
+        </div>
 
-            <!-- Sidebar (Right) -->
-            <div class="space-y-6">
+        <!-- Sidebar (Right) -->
+        <div class="w-full lg:w-[30%] space-y-6">
                 <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[28px] shadow-2xl" x-data="{ uploadType: 'file' }">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6 justify-center">
                          <span class="material-symbols-outlined text-[#E50914]">image</span>
