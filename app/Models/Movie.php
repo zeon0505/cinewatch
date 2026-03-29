@@ -26,7 +26,8 @@ class Movie extends Model
         'tmdb_id',
         'year',
         'status',
-        'is_premium'
+        'is_premium',
+        'series_id'
     ];
 
     public function user()
@@ -64,5 +65,10 @@ class Movie extends Model
         return $query->where(function($q) {
             $q->where('audience_type', 'kids');
         });
+    }
+
+    public function series()
+    {
+        return $this->belongsTo(Series::class);
     }
 }

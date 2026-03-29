@@ -69,6 +69,10 @@
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">category</span>
                     <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Kategori</span>
                 </a>
+                <a href="{{ route('admin.series.index') }}" class="nav-item rounded-xl {{ request()->is('admin/series*') ? 'active' : '' }}" title="Kelola Series / Koleksi">
+                    <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">collections</span>
+                    <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">Kelola Series</span>
+                </a>
                 <a href="{{ route('admin.users.index') }}" class="nav-item rounded-xl {{ request()->is('admin/users*') ? 'active' : '' }}" title="Kelola User">
                     <span class="material-symbols-outlined" :class="sidebarOpen ? 'mr-4' : ''">group</span>
                     <span x-show="sidebarOpen" x-transition.opacity class="whitespace-nowrap">User</span>

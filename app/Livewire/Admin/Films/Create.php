@@ -18,6 +18,7 @@ class Create extends Component
     // Film Data Properties
     public $title, $slug, $description, $thumbnail, $video_url, $duration, $year, $tmdb_id;
     public $category_id; // Legacy, keeping for minimal backward compatibility
+    public $series_id = null; // NEW: For Series/Kategori
     public $selectedCategories = []; // NEW: Array for many-to-many
     public $audience_type = 'adult'; // NEW: adult/kids
     public $rating_value = 0.0; // NEW: manual rating
@@ -287,6 +288,7 @@ class Create extends Component
             'video_url' => 'required|url',
             'selectedCategories' => 'required|array|min:1',
             'audience_type' => 'required',
+            'series_id' => 'nullable|exists:series,id',
         ]);
 
         $thumbnailPath = $this->thumbnail;
@@ -311,6 +313,7 @@ class Create extends Component
             'is_premium' => $this->is_premium,
             'status' => 'published',
             'category_id' => $this->selectedCategories[0] ?? null, // Fallback for legacy
+            'series_id' => $this->series_id ?: null,
         ]);
 
         // Sync many-to-many genres
@@ -323,6 +326,7 @@ class Create extends Component
     public function render()
     {
         $categories = Category::all();
-        return view('livewire.admin.films.create', compact('categories'));
+        $series = \App\Models\Series::all();
+        return view('livewire.admin.films.create', compact('categories', 'series'));
     }
 }

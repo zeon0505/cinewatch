@@ -79,16 +79,16 @@
                 <ul class="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-[3px] text-gray-400">
                     <li><a href="/" wire:navigate class="hover:text-white transition-colors {{ request()->is('/') ? 'text-red-500' : '' }}">Beranda</a></li>
                     <li x-data="{ showCats: false }" class="relative" @mouseenter="showCats = true" @mouseleave="showCats = false">
-                        <button class="hover:text-white transition-colors flex items-center gap-1 {{ request()->routeIs('category.detail') ? 'text-red-500' : '' }}">
-                            Kategori <span class="material-symbols-outlined text-sm transition-transform" :class="showCats ? 'rotate-180' : ''">expand_more</span>
+                        <button class="hover:text-white transition-colors flex items-center gap-1 {{ request()->routeIs('series.detail') ? 'text-red-500' : '' }}">
+                            Series <span class="material-symbols-outlined text-sm transition-transform" :class="showCats ? 'rotate-180' : ''">expand_more</span>
                         </button>
                         <div x-show="showCats" x-transition.opacity class="absolute top-full left-0 mt-4 w-56 bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[300] overflow-hidden py-2" x-cloak>
                             <div class="px-4 py-2 border-b border-white/5 mb-1">
-                                <span class="text-[9px] text-gray-500 font-bold uppercase tracking-[3px]">Pilih Kategori / Series</span>
+                                <span class="text-[9px] text-gray-500 font-bold uppercase tracking-[3px]">Pilih Series / Koleksi</span>
                             </div>
                             <div class="max-h-[60vh] overflow-y-auto custom-scrollbar">
-                                @foreach(\App\Models\Category::orderBy('name')->get() as $cat)
-                                    <a href="{{ route('category.detail', $cat->slug) }}" wire:navigate class="block px-4 py-2.5 text-[10px] font-black text-gray-400 hover:text-white hover:bg-white/5 transition-all uppercase tracking-widest">{{ $cat->name }}</a>
+                                @foreach(\App\Models\Series::orderBy('name')->get() as $s)
+                                    <a href="{{ route('series.detail', $s->slug) }}" wire:navigate class="block px-4 py-2.5 text-[10px] font-black text-gray-400 hover:text-white hover:bg-white/5 transition-all uppercase tracking-widest">{{ $s->name }}</a>
                                 @endforeach
                             </div>
                         </div>
@@ -218,13 +218,13 @@
                             <div x-data="{ open: false }" class="flex flex-col">
                                 <button @click="open = !open" class="flex items-center justify-between px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                                     <div class="flex items-center gap-4">
-                                        <span class="material-symbols-outlined text-lg">category</span> Kategori / Series
+                                        <span class="material-symbols-outlined text-lg">collections</span> Series / Koleksi
                                     </div>
                                     <span class="material-symbols-outlined text-xs transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
                                 </button>
                                 <div x-show="open" x-transition.opacity class="pl-12 pr-4 py-2 flex flex-col gap-1 border-l border-white/5 ml-6" x-cloak>
-                                    @foreach(\App\Models\Category::orderBy('name')->get() as $cat)
-                                        <a href="{{ route('category.detail', $cat->slug) }}" @click="mobileMenu = false" wire:navigate class="text-[10px] font-bold uppercase tracking-[2px] text-gray-500 hover:text-white transition-colors py-2">{{ $cat->name }}</a>
+                                    @foreach(\App\Models\Series::orderBy('name')->get() as $s)
+                                        <a href="{{ route('series.detail', $s->slug) }}" @click="mobileMenu = false" wire:navigate class="text-[10px] font-bold uppercase tracking-[2px] text-gray-500 hover:text-white transition-colors py-2">{{ $s->name }}</a>
                                     @endforeach
                                 </div>
                             </div>

@@ -80,6 +80,7 @@ Route::get('/profiles', \App\Livewire\Auth\ProfileSelection::class)->name('profi
 Route::get('/trending', \App\Livewire\Trending::class)->name('trending');
 Route::get('/new-releases', \App\Livewire\NewReleases::class)->name('new.releases');
 Route::get('/category/{slug}', \App\Livewire\CategoryDetail::class)->name('category.detail');
+Route::get('/series/{slug}', \App\Livewire\SeriesDetail::class)->name('series.detail');
 
 Route::get('/about', function() { return view('pages.about'); })->name('about');
 Route::get('/contact', function() { return view('pages.contact'); })->name('contact');
@@ -199,6 +200,7 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->group(function () {
     Route::get('/films/edit/{id}', \App\Livewire\Admin\Films\Edit::class)->name('admin.films.edit');
     
     Route::get('/genres', \App\Livewire\Admin\Genres\Index::class)->name('admin.genres.index');
+    Route::get('/series', \App\Livewire\Admin\Series\Index::class)->name('admin.series.index');
     Route::get('/users', \App\Livewire\Admin\Users\Index::class)->name('admin.users.index');
     Route::get('/reports', \App\Livewire\Admin\Reports\ListReports::class)->name('admin.reports.index');
     Route::get('/requests', \App\Livewire\Admin\Requests\ListRequests::class)->name('admin.requests.index');

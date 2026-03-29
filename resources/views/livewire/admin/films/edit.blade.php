@@ -111,6 +111,19 @@
                 </div>
 
                 <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl">
+                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
+                         <span class="material-symbols-outlined text-red-600">collections</span>
+                         <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Koleksi & Series</h3>
+                    </div>
+                    <select wire:model="series_id" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm uppercase tracking-widest cursor-pointer appearance-none relative">
+                        <option value="">-- Tidak Terhubung Series --</option>
+                        @foreach($series as $s)
+                            <option value="{{ $s->id }}">{{ $s->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="bg-neutral-900/40 backdrop-blur-3xl border border-white/5 p-10 rounded-[24px] shadow-2xl">
                     <div class="flex items-center gap-3 mb-8 border-b border-white/5 pb-6">
                          <span class="material-symbols-outlined text-red-600">no_adult_content</span>
                          <h3 class="text-xs font-black uppercase text-gray-500 tracking-[3px]">Target Penonton</h3>

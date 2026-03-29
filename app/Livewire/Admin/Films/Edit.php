@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Livewire\Attributes\Layout;
 
 class Edit extends Component
 {
@@ -15,6 +16,7 @@ class Edit extends Component
     public $audience_type; // NEW
     public $rating_value; // NEW
     public $age_rating; // NEW
+    public $series_id;
 
     public function mount($id)
     {
@@ -32,6 +34,7 @@ class Edit extends Component
         $this->audience_type = $movie->audience_type ?? 'adult';
         $this->rating_value = $movie->rating_value ?? 0.0;
         $this->age_rating = $movie->age_rating ?? 'PG-13';
+        $this->series_id = $movie->series_id;
         $this->selectedCategories = $movie->categories->pluck('id')->toArray();
     }
 
@@ -39,6 +42,7 @@ class Edit extends Component
         'title' => 'required|min:3',
         'selectedCategories' => 'required|array|min:1',
         'audience_type' => 'required',
+        'series_id' => 'nullable|exists:series,id',
     ];
 
     public function update()
@@ -59,6 +63,7 @@ class Edit extends Component
             'rating_value' => $this->rating_value,
             'age_rating' => $this->age_rating,
             'category_id' => $this->selectedCategories[0] ?? null, // Fallback
+            'series_id' => $this->series_id ?: null,
         ]);
 
         $movie->categories()->sync($this->selectedCategories);
@@ -67,9 +72,11 @@ class Edit extends Component
         return redirect()->route('admin.films.index');
     }
 
+    #[Layout('admin.dashboard-layout')]
     public function render()
     {
         $categories = Category::all();
-        return view('livewire.admin.films.edit', compact('categories'))->layout('admin.dashboard-layout');
+        $series = \App\Models\Series::all();
+        return view('livewire.admin.films.edit', compact('categories', 'series'));
     }
 }
