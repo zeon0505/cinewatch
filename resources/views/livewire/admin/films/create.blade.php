@@ -117,14 +117,41 @@
                             <textarea wire:model="description" rows="5" placeholder="Alur cerita singkat..." class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] outline-none font-bold"></textarea>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                             <div>
-                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Tahun Produksi</label>
-                                <input wire:model="year" type="number" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] outline-none font-bold" />
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Tahun Rilis</label>
+                                <input wire:model="year" type="number" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
                             </div>
                             <div>
-                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-[3px] mb-4 ml-1">Durasi Total</label>
-                                <input wire:model="duration" type="text" placeholder="Contoh: 1h 45m" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:ring-1 focus:ring-[#E50914] outline-none font-bold" />
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Durasi (Mnt/Jam)</label>
+                                <input wire:model="duration" type="text" placeholder="Contoh: 1h 45m" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Skor Rating (0-10)</label>
+                                <div class="relative">
+                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-yellow-500 text-[16px]">star</span>
+                                    <input wire:model="rating_value" type="number" step="0.1" max="10" class="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
+                                </div>
+                            </div>
+                            <div class="relative transition-all" x-data="{ open: false }" :class="open ? 'z-50' : 'z-10'">
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Batas Umur (Age)</label>
+                                <div @click="open = !open" @click.away="open = false" 
+                                     class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer flex justify-between items-center group">
+                                     <span class="font-bold text-sm uppercase tracking-wider text-white">
+                                        {{ $age_rating ?: 'Pilih...' }}
+                                     </span>
+                                     <span class="material-symbols-outlined text-gray-500 text-[16px] transition-transform" :class="open ? 'rotate-180 text-white' : 'group-hover:text-white'">expand_more</span>
+                                </div>
+                                <div x-show="open" x-transition.opacity 
+                                     class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-1.5" x-cloak style="display: none;">
+                                     @foreach(['SU', '13+', '17+', '21+', 'R', 'PG-13', 'G'] as $val)
+                                     <div wire:click="$set('age_rating', '{{ $val }}')" @click="open = false" 
+                                          class="px-4 py-2 flex items-center gap-3 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-all {{ $age_rating == $val ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
+                                          <span class="material-symbols-outlined text-[16px] {{ $age_rating == $val ? 'opacity-100' : 'opacity-0' }}">check</span>
+                                          {{ $val }}
+                                     </div>
+                                     @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -283,20 +310,7 @@
                         </label>
                     </div>
 
-                    <!-- RATING & YEAR -->
-                    <div class="grid grid-cols-2 gap-6 mt-8">
-                        <div class="space-y-2">
-                            <label class="text-[10px] text-gray-500 font-black uppercase tracking-[3px]">Skor Rating</label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-yellow-500 text-sm">star</span>
-                                <input type="number" step="0.1" max="10" wire:model="rating_value" class="w-full bg-white/[0.03] border border-white/5 rounded-xl pl-10 pr-4 py-3 text-white text-sm font-bold focus:border-red-600 outline-none transition-all" />
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] text-gray-500 font-black uppercase tracking-[3px]">Tahun Rilis</label>
-                            <input type="text" wire:model="year" class="w-full bg-white/[0.03] border border-white/5 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-red-600 outline-none transition-all" />
-                        </div>
-                    </div>
+
                 </div>
 
                 <div class="space-y-4">

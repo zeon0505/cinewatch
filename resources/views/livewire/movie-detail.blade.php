@@ -113,7 +113,7 @@
             
             <div id="related-row" class="flex gap-4 overflow-x-auto px-6 md:px-16 pb-6 scroll-smooth scrollbar-hide">
                 @foreach($relatedMovies as $related)
-                <div onclick="window.location.href='{{ route('movie.detail', $related->slug) }}'" class="flex-none w-[160px] md:w-[200px] group/card cursor-pointer">
+                <div onclick="window.location.href='{{ route('movie.detail', $related->slug) }}';" class="flex-none w-[160px] md:w-[200px] group/card cursor-pointer">
                     <div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
                         <img src="{{ $related->thumbnail }}" alt="{{ $related->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center">
