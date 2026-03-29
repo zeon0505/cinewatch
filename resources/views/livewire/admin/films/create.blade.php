@@ -1,5 +1,5 @@
 <div class="h-full overflow-y-auto scrollbar-hide">
-    <div class="max-w-6xl mx-auto p-8 pt-0">
+    <div class="max-w-6xl mx-auto p-8 pt-0 pb-60">
         <!-- Header Section -->
         <div class="flex items-center gap-8 mb-12 animate-fadeIn">
             <a href="{{ route('admin.films.index') }}" class="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-white hover:bg-[#E50914] transition-all shadow-xl">
@@ -119,32 +119,33 @@
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                             <div>
-                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Tahun Rilis</label>
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1">Tahun Rilis</label>
                                 <input wire:model="year" type="number" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
                             </div>
                             <div>
-                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Durasi (Mnt/Jam)</label>
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1">Durasi (Mnt/Jam)</label>
                                 <input wire:model="duration" type="text" placeholder="Contoh: 1h 45m" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
                             </div>
                             <div>
-                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Skor Rating (0-10)</label>
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1">Skor Rating (0-10)</label>
                                 <div class="relative">
                                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-yellow-500 text-[16px]">star</span>
                                     <input wire:model="rating_value" type="number" step="0.1" max="10" class="w-full bg-black/40 border border-white/10 rounded-xl pl-9 pr-3 py-3 text-white focus:ring-1 focus:ring-red-600 focus:bg-white/5 outline-none font-bold text-sm" />
                                 </div>
                             </div>
                             <div class="relative transition-all" x-data="{ open: false }" :class="open ? 'z-50' : 'z-10'">
-                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1 whitespace-nowrap overflow-hidden">Batas Umur (Age)</label>
+                                <label class="block text-gray-500 text-[10px] font-black uppercase tracking-widest mb-4 ml-1">Batas Umur (Age)</label>
                                 <div @click="open = !open" @click.away="open = false" 
                                      class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer flex justify-between items-center group">
-                                     <span class="font-bold text-sm uppercase tracking-wider text-white">
+                                     <span class="font-bold text-xs uppercase tracking-wider text-white">
                                         {{ $age_rating ?: 'Pilih...' }}
                                      </span>
                                      <span class="material-symbols-outlined text-gray-500 text-[16px] transition-transform" :class="open ? 'rotate-180 text-white' : 'group-hover:text-white'">expand_more</span>
                                 </div>
                                 <div x-show="open" x-transition.opacity 
                                      class="absolute top-full left-0 right-0 mt-2 bg-[#0A0A0A] border border-white/10 rounded-xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] z-50 overflow-hidden flex flex-col p-1.5" x-cloak style="display: none;">
-                                     @foreach(['SU', '13+', '17+', '21+', 'R', 'PG-13', 'G'] as $val)
+                                     @php $ratings = ['SU', '13+', '17+', '21+', 'R', 'PG-13', 'G', 'TV-14', 'TV-MA', 'TV-PG']; @endphp
+                                     @foreach($ratings as $val)
                                      <div wire:click="$set('age_rating', '{{ $val }}')" @click="open = false" 
                                           class="px-4 py-2 flex items-center gap-3 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer transition-all {{ $age_rating == $val ? 'bg-red-600/10 text-red-500 border-l-[3px] border-red-600' : 'text-gray-400 hover:text-white hover:bg-white/5 border-l-[3px] border-transparent' }}">
                                           <span class="material-symbols-outlined text-[16px] {{ $age_rating == $val ? 'opacity-100' : 'opacity-0' }}">check</span>
