@@ -58,7 +58,7 @@
             <div class="absolute inset-0 z-10 flex flex-col justify-center px-10 md:px-20 max-w-4xl">
                 <div class="animate-fadeIn scale-entrance">
                     <span class="tag-small">Featured Billboard</span>
-                    <h1 class="text-6xl md:text-8xl font-black leading-[0.85] mb-6 tracking-tighter uppercase" style="font-family:'Bebas Neue',sans-serif">
+                    <h1 class="text-6xl md:text-8xl font-black leading-[0.85] mb-6 tracking-normal uppercase" style="font-family:'Bebas Neue',sans-serif">
                         {{ $heroMovie->title }}
                     </h1>
                     <p class="text-gray-300 text-sm md:text-base max-w-xl leading-relaxed mb-8 opacity-70 font-light italic drop-shadow-lg">
@@ -99,7 +99,7 @@
         @if(isset($continueWatching) && count($continueWatching) > 0)
         <section id="continue-watching" class="row-container animate-fadeIn">
             <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Lanjutkan Menonton</h2>
+                <h2 class="text-2xl font-black text-white uppercase tracking-normal" style="font-family:'Bebas Neue',sans-serif">Lanjutkan Menonton</h2>
                 <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
             </div>
             <div class="row-container !p-0">
@@ -133,7 +133,7 @@
 
         <section id="trending" class="row-container fade-in-up">
             <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Trending Now</h2>
+                <h2 class="text-2xl font-black text-white uppercase tracking-normal" style="font-family:'Bebas Neue',sans-serif">Trending Now</h2>
                 <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
             </div>
             <div class="row-container !p-0">
@@ -170,7 +170,7 @@
 
         <section id="genre" class="px-10 md:px-20 py-12 fade-in-up">
             <div class="flex flex-col items-center mb-10 text-center">
-                <h2 class="text-4xl font-black text-white uppercase tracking-tight" style="font-family:'Bebas Neue',sans-serif">Browse Categories</h2>
+                <h2 class="text-4xl font-black text-white uppercase tracking-normal" style="font-family:'Bebas Neue',sans-serif">Browse Categories</h2>
                 <div class="w-16 h-1 bg-red-600 mt-2 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)]"></div>
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-6 gap-6">
@@ -185,7 +185,7 @@
 
         <section id="new" class="row-container fade-in-up">
             <div class="px-4 mb-2 flex items-center justify-between">
-                <h2 class="text-2xl font-black text-white uppercase tracking-tighter" style="font-family:'Bebas Neue',sans-serif">Fresh Releases</h2>
+                <h2 class="text-2xl font-black text-white uppercase tracking-normal" style="font-family:'Bebas Neue',sans-serif">Fresh Releases</h2>
                 <div class="h-[1px] flex-1 bg-white/5 mx-6"></div>
             </div>
             <div class="row-container !p-0">
