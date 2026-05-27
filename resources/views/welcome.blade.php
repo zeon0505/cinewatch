@@ -106,7 +106,7 @@
                 <button onclick="scrollRow('continue-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
                 <div id="continue-row" class="row-scroll px-10">
                     @foreach($continueWatching as $history)
-                    <div onclick="window.location.href='{{ route('movie.detail', $history->movie->slug) }}';" class="film-card group !w-[220px]">
+                    <div onclick="window.location.href=`{{ route('movie.detail', $history->movie->slug) }}`;" class="film-card group !w-[220px]">
                         <div class="relative aspect-[16/9] overflow-hidden">
                             <img src="{{ $history->movie->thumbnail }}" alt="{{ $history->movie->title }}" class="w-full h-full object-cover" />
                             <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -140,7 +140,7 @@
                 <button onclick="scrollRow('trending-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
                 <div id="trending-row" class="row-scroll px-10">
                     @forelse($trendingMovies as $movie)
-                    <div onclick="window.location.href='{{ route('movie.detail', $movie->slug) }}';" class="film-card group">
+                    <div onclick="window.location.href=`{{ route('movie.detail', $movie->slug) }}`;" class="film-card group">
                         <img src="{{ $movie->thumbnail }}" alt="{{ $movie->title }}" />
                         <div class="card-info">
                             @if($movie->is_premium)
@@ -175,7 +175,7 @@
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-6 gap-6">
                 @foreach($categories as $category)
-                <div onclick="window.location.href='{{ route('category.detail', $category->slug) }}';" class="genre-pill group">
+                <div onclick="window.location.href=`{{ route('category.detail', $category->slug) }}`;" class="genre-pill group">
                     <h3 class="relative z-10 text-white group-hover:scale-105 transition-transform">{{ $category->name }}</h3>
                     <p class="relative z-10 text-[8px] text-gray-500 group-hover:text-white/70 font-black uppercase tracking-[2px] mt-1">{{ $category->movies_count }} Movies</p>
                 </div>
@@ -192,7 +192,7 @@
                 <button onclick="scrollRow('new-row', -800)" class="nav-btn prev"><span class="material-symbols-outlined">chevron_left</span></button>
                 <div id="new-row" class="row-scroll px-10">
                     @forelse($latestMovies as $movie)
-                    <div onclick="window.location.href='{{ route('movie.detail', $movie->slug) }}';" class="film-card group">
+                    <div onclick="window.location.href=`{{ route('movie.detail', $movie->slug) }}`;" class="film-card group">
                         <img src="{{ $movie->thumbnail }}" alt="{{ $movie->title }}" />
                         <div class="card-info text-center">
                             @if($movie->is_premium)
